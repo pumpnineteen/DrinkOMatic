@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="DRINKOMATICKEYBIND" header="DRINKOMATICKEYBINDHEADER" category="ADDONS">
+        UseBestDrink()
+    </Binding>
+</Bindings>

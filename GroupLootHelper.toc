@@ -1,0 +1,11 @@
+## Interface: 11505
+## Title: Group Loot Helper
+## Notes: Helping groups with better loot rolls
+## Author: Pump19
+## Version: 1.0.1
+## SavedVariables: GatheringTooltipDB
+
+embeds.xml
+Locales\Locales.xml
+
+GroupLootHelper.lua
