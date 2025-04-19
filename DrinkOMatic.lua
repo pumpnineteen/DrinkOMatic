@@ -755,7 +755,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         -- print("Bound:", self.isBoundButton, LibKeyBound)
         if self.isBoundButton then
             if LibKeyBound then
-                print("KeyBound: ", actualButtonName, " is bound to: ", self:GetHotkey())
+                debugmsg("KeyBound: ", actualButtonName, " is bound to: ", self:GetHotkey())
                 LibKeyBound:Set(self)
             end
         end
@@ -936,11 +936,16 @@ local function getKeys(binding, keys)
 	return keys
 end
 
+local function getKeybindName(button)
+    local name = ("CLICK %s:%s"):format(button:GetName(), DOM.keyBoundClickButton)
+    return name
+end
+
 function DOM:AddKeyboundScritps(button)
     debugmsg("Adding keybound scripts to: ", button:GetName())
 
     function button:GetHotkey()
-        local name = ("CLICK %s:%s"):format(self:GetName(), DOM.keyBoundClickButton)
+        local name = getKeybindName(button)
         local key = GetBindingKey(name)
         if key then
             return LibKeyBound and LibKeyBound:ToShortKey(key) or key
@@ -958,7 +963,7 @@ function DOM:AddKeyboundScritps(button)
             self.keybindtext:SetText("")
             self.keybindtext:Hide()
         end
-        local binding = button:GetName()
+        local binding = getKeybindName(button)
         while GetBindingKey(binding) do
             SetBinding(GetBindingKey(binding), nil)
         end
@@ -967,8 +972,7 @@ function DOM:AddKeyboundScritps(button)
 
     function button:GetBindings()
         local keys
-        
-        keys = getKeys(("CLICK %s:%s"):format(self:GetName(), self.config.keyBoundClickButton), keys)
+        keys = getKeys(getKeybindName(button), keys)
         
         self.currentBinding = keys
         return keys
