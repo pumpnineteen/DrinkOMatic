@@ -810,8 +810,10 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button:RegisterEvent("BAG_UPDATE_COOLDOWN")
     button:SetScript("OnEvent", function(self, event, key, state)
         if event == "BAG_UPDATE_COOLDOWN" or event == "PLAYER_REGEN_ENABLED" then
-            local start, duration, enable = C_Container.GetItemCooldown(itemID)
-            CooldownFrame_Set(button.cooldown, start, duration, enable)
+            if itemID then
+                local start, duration, enable = C_Container.GetItemCooldown(itemID)
+                CooldownFrame_Set(button.cooldown, start, duration, enable)
+            end
         end
         if event == "MODIFIER_STATE_CHANGED" then
             if useDruid then 
@@ -838,8 +840,11 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
     button.cooldown:SetSwipeColor(0, 0, 0, 0)
     button.cooldown:SetAllPoints()
-    local start, duration, enable = C_Container.GetItemCooldown(itemID)
-    CooldownFrame_Set(button.cooldown, start, duration, enable)
+    
+    if itemID then
+        local start, duration, enable = C_Container.GetItemCooldown(itemID)
+        CooldownFrame_Set(button.cooldown, start, duration, enable)
+    end
 
     
     button:SetMovable(true)
