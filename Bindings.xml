@@ -1,5 +1,14 @@
 <Bindings>
-    <Binding name="DRINKOMATICKEYBIND" header="DRINKOMATICKEYBINDHEADER" category="ADDONS">
-        UseBestDrink()
-    </Binding>
+    <Binding name="CLICK DOMButton1:Keybind" header="DOMHEAD" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton2:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton3:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton4:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton5:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton6:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton7:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton8:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton9:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton10:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton11:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton12:Keybind" category="Drink-o-Matic "/>
 </Bindings>

@@ -4,7 +4,7 @@
 ## Author: Pump
 ## Version: 1.0
 ## SavedVariables:
-## SavedVariablesPerCharacter: DOM_savedPositions
+## SavedVariablesPerCharacter: DOM_savedPositions, DOM_RealNames, DOM_BoundToNames
 
 
 embeds.xml
