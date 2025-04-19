@@ -18,9 +18,9 @@ Added slash commands:<br>
 /dom kb -- toggles keybind mode<br>
 /dom edit -- toggles edit mode<br>
 
-when you turn on edit mode, special green buttons appear, if you drag any of your buttons into one of the green buttons, it will then become a special BoundButton
-BoundButtons are only movable while edit mode is on
-BoundButtons can have keybinds. Add keybinds to your BoundButtons by turning on keybind mode. You don't need to be in edit mode for keybind mode to work.
+when you turn on edit mode, special green buttons appear, if you drag any of your buttons into one of the green buttons, it will then become a special <b>BoundButton</b>.<br>
+<b>BoundButton</b> are only movable while edit mode is on
+<b>BoundButton</b> can have keybinds. Add keybinds to your BoundButtons by turning on keybind mode. You don't need to be in edit mode for keybind mode to work.
 
  
 If you have suggestions, don't hesitate to ask. I know it's very barebones at the moment, but it is functional.
