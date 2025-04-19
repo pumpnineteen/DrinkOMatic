@@ -10,6 +10,9 @@
 			<OnEvent>
 				DOM_OnEvent(self, event, ...);
 			</OnEvent>
+            <!-- <OnEnable>
+                DrinkOMatic_OnEnable(self);
+            </OnEnable> -->
         </Scripts>
     </Frame>
 </Ui>
