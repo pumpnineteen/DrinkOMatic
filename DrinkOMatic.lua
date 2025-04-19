@@ -975,6 +975,9 @@ function DOM:AddKeyboundScritps(button)
     end
 
     function button:GetActionName()
+        if not button.itemName then
+            return button:GetName()
+        end
         if button.altItemName then
             return format("DrinkButton: %s , alt: %s", button.itemName, button.altItemName)
         end
@@ -1161,52 +1164,7 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
         saveButtonPosition(dropTarget)
     end)
 
-   
-    function dropTarget:GetHotkey()
-        return GetBindingKey(dropTarget:GetName()) or ""
-    end
-
-    function dropTarget:SetKey(key)
-        self.currentBinding = key
-        debugmsg("New key set for", self:GetName(), ":", key)
-        SetBinding(key, dropTarget:GetName())
-        ClearOverrideBindings(dropTarget)
-        if dropTarget.childButton then
-            SetOverrideBindingClick(dropTarget, false, key, dropTarget.childButton:GetName())
-        end
-        setKeybindText(dropTarget)
-
-    end
-
-    function dropTarget:ClearBindings()
-        self.currentBinding = nil
-        if self.keybindtext then
-            self.keybindtext:SetText("")
-            self.keybindtext:Hide()
-        end
-        local binding = dropTarget:GetName()
-        while GetBindingKey(binding) do
-            SetBinding(GetBindingKey(binding), nil)
-        end
-        if dropTarget.childButton then
-            ClearOverrideBindings(dropTarget.childButton)
-        end
-
-    end
-
-    function dropTarget:GetBindings()
-        local keys = ""
-        local binding = dropTarget:GetName()
-        for i = 1, select('#', GetBindingKey(binding)) do
-            local hotKey = select(i, GetBindingKey(binding))
-            if keys ~= "" then
-                keys = keys .. ', '
-            end
-            keys = keys .. GetBindingText(hotKey,'KEY_')
-        end
-        self.currentBinding = keys
-        return self.currentBinding
-    end
+    DOM:AddKeyboundScritps(dropTarget)
 
     -- Make button movable out of combat
     dropTarget:SetMovable(DOM.editMode)
@@ -1220,17 +1178,6 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
         self:StopMovingOrSizing()
         saveButtonPosition(self)
     end)
-
-    function dropTarget:GetActionName()
-        return dropTarget:GetName()
-    end
-
-    if DEBUG then
-        local key1 = GetBindingKey(dropTarget:GetName())
-        local displayKey = LibKeyBound:ToShortKey(key1)
-    
-        print("Binding for", dropTarget:GetName(), "is", displayKey)
-    end
 
     dropTarget:RegisterEvent("PLAYER_REGEN_ENABLED")
     dropTarget:SetScript("OnEvent", function(self, event, key, state)
