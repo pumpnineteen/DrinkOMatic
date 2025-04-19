@@ -13,10 +13,10 @@ Since the buttons are macro based, they use names, so I cannot guarantee that th
 
 Channeled mana potions are separate category from "normal" mana pots.
 
-Added slash commands:
-/dom -- prints out a help
-/dom kb -- toggles keybind mode
-/dom edit -- toggles edit mode
+Added slash commands:<br>
+/dom -- prints out a help<br>
+/dom kb -- toggles keybind mode<br>
+/dom edit -- toggles edit mode<br>
 
 when you turn on edit mode, special green buttons appear, if you drag any of your buttons into one of the green buttons, it will then become a special BoundButton
 BoundButtons are only movable while edit mode is on
