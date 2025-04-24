@@ -8698,4 +8698,7 @@ tbc_other_consumables = {
     9319,  -- Nimboya's Laden Pike > Place at a Witherbark village.
     9360,  -- Cuergo's Gold > A strong alcoholic beverage.
     9361,  -- Cuergo's Gold with Worm > An extremely potent alcoholic beverage.
+
+    20520,  -- Dark Rune 
+    12662,  -- Demonic Rune 
 }
