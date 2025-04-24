@@ -5,6 +5,7 @@
 ## Version: 1.0
 ## SavedVariables:
 ## SavedVariablesPerCharacter: DOM_savedPositions, DOM_RealNames, DOM_BoundToNames
+## OptionalDeps: Cooldown_Edge
 
 
 embeds.xml

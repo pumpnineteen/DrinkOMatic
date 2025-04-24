@@ -1,5 +1,5 @@
 local addonName, DOM = ...
-local DOM = LibStub("AceAddon-3.0"):NewAddon(DOM, "AceConsole-3.0", "AceEvent-3.0")
+DOM = LibStub("AceAddon-3.0"):NewAddon(DOM, "AceConsole-3.0", "AceEvent-3.0")
 
 -- Initialize localization
 local L = LibStub("AceLocale-3.0"):GetLocale("DrinkOMatic")
@@ -8,8 +8,9 @@ local L = LibStub("AceLocale-3.0"):GetLocale("DrinkOMatic")
 local AceGUI = LibStub("AceGUI-3.0")
 local LibBagUtils = LibStub("LibBagUtils-1.0")
 local LibKeyBound = LibStub("LibKeyBound-1.0", true)
-local LAB = LibStub("LibActionButton-1.0")
+-- local LAB = LibStub("LibActionButton-1.0")
 
+local CE = LibStub("AceAddon-3.0"):GetAddon("Cooldown_Edge")
 
 local LDB = LibStub("LibDataBroker-1.1", true)
 local dataObject = LDB:NewDataObject("Drink-o-Matic", {
@@ -30,7 +31,7 @@ local dataObject = LDB:NewDataObject("Drink-o-Matic", {
     end,
     OnTooltipShow = function(tooltip)
         tooltip:AddLine("Drink-o-Matic", 1, 1, 1) -- Tooltip title
-        tooltip:AddLine("Left-click: Open settings", 0.8, 0.8, 0.8) -- Tooltip instructions
+        -- tooltip:AddLine("Left-click: Open settings", 0.8, 0.8, 0.8) -- Tooltip instructions
         tooltip:AddLine("Shift-Right-click: Toggle keybinding mode", 0.8, 0.8, 0.8)
         tooltip:AddLine("Right-click: Edit mode", 0.8, 0.8, 0.8) -- Tooltip instructions
     end,
@@ -61,6 +62,7 @@ DOM.buttonSize = 32 -- Size of the buttons
 DOM.itemIDMap = {} -- Table to store item IDs
 DOM.dropBaseName = "DOMButton" -- Base name for drop target buttons
 DOM.keyBoundClickButton = "LeftButton" -- Default click button for keybindings
+DOM.creatingButton = {}
 
 local defaultButtonConfig = {
 	outOfRangeColoring = "button",
@@ -92,6 +94,10 @@ local function debugmsg(...)
         end
         print(output)
     end
+end
+
+local function IsOnCooldown(start, duration)
+    return not (start == 0 and duration == 0)
 end
 
 function DOM:CreateFrame()
@@ -157,8 +163,8 @@ function TwoWayMap:new(forward, reverse, forwardName, reverseName)
         reverseName = reverseName,
     }
     setmetatable(obj, self)
-    print(obj.forward == forward)  -- Should output true
-    print(obj.reverse == reverse)  -- Should output true
+    debugmsg(obj.forward == forward)  -- Should output true
+    debugmsg(obj.reverse == reverse)  -- Should output true
     -- Add dynamic method names for forward and reverse retrieval
     obj:addDynamicGetters()
     return obj
@@ -296,9 +302,11 @@ local healthstones
 local scrolls
 local foods
 local other_consumables
+local buffmap
 
 local function get_tables()
     if IsClassicWow() or IsTBCWow() then
+        buffmap = tbc_consumables
         drinks = tbc_drinks
         conjured_drinks = tbc_conjured_drinks
         healing_potions = tbc_healing_potions
@@ -357,7 +365,7 @@ end
 
 local function saveButtonPosition(button)
     local point, relativeTo, relativePoint, xOffs, yOffs = button:GetPoint()
-    print("Saving position for button: ", button:GetName(), point, relativeTo, relativePoint, xOffs, yOffs)
+    debugmsg("Saving position for button: ", button:GetName(), point, relativeTo, relativePoint, xOffs, yOffs)
     DOM_savedPositions[button:GetName()] = { point, relativeTo, relativePoint, xOffs, yOffs }
     -- print(button:GetName(), point, relativeTo, relativePoint, xOffs, yOffs)
 end
@@ -579,7 +587,7 @@ function DOM:StopDragUpdates()
         self.dragUpdateTicker:Cancel()
         self.dragUpdateTicker = nil
     end
-    print(self.draggedButton and self.draggedButton:GetName(), self.dropTarget and self.dropTarget:GetName())
+    -- print(self.draggedButton and self.draggedButton:GetName(), self.dropTarget and self.dropTarget:GetName())
     if self.draggedButton and self.dropTarget then
         self.buttonNameMap:Set(self.dropTarget:GetName(), self.draggedButton:GetName())
         updateNeeded = true
@@ -593,7 +601,7 @@ function DOM:StopDragUpdates()
     self.draggedButton = nil
     self.dropTarget = nil
     if updateNeeded then
-        print("Requesting update...")
+        -- print("Requesting update...")
         DOM:ExitEditMode()
         self:createButtons()
         DOM.EnterEditMode()
@@ -639,6 +647,8 @@ function DOM:ButtonSetPoint(button, buttonName)
 end
 
 local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames)
+    if DOM.creatingButton[buttonName] then return end
+    DOM.creatingButton[buttonName] = true
     local itemName = (itemNames and itemNames[1]) or nil    -- Use the first item from itemNames
     local altItemName = (altItemNames and altItemNames[1]) or nil  -- Use the first item from altItemNames
     itemName = itemName or altItemName or nil
@@ -668,11 +678,30 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         debugmsg("Creating Bound Button: ", buttonName, " for item: ", itemName, " with actual name: ", actualButtonName, " isBoundButton: ", isBoundButton)
     end
    
-    local button = DOM.Buttons[actualButtonName] or  CreateFrame("Button", actualButtonName, UIParent, "SecureActionButtonTemplate,BackdropTemplate") 
+    local button = DOM.Buttons[actualButtonName] or  CreateFrame("Button", actualButtonName, UIParent, "SecureActionButtonTemplate,BackdropTemplate")
+    -- local button = DOM.Buttons[actualButtonName] or  LAB:CreateButton(buttonID, actualButtonName, DOM.header)
+    -- print("DrinkButton:" , button)
     button.itemName = itemName
     button.altItemName = altItemName
     button.isBoundButton = isBoundButton
     button.realButtonName = buttonName
+    button.cooldownProgress = false
+    button.itemDepleted = false
+    button.altItemDepleted = false
+    button.itemIndex = 1
+    button.altItemIndex = 1
+    button.isPinned = false
+    button.isDesaturated = false
+    button.lastBAG_UPDATE_COOLDOWN = GetTime()
+    button.isDesaturated = false 
+
+    if not altItemNames then 
+        button.altItemDepleted = true
+    end
+
+    if not itemNames then
+        button.itemDepleted = true
+    end
 
     DOM.Buttons[actualButtonName] = button
     
@@ -693,6 +722,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     -- Set the button texture and icon
     local itemTexture = GetItemIcon(itemName)
     local itemID = GetItemInfoInstant(itemName)
+    button.itemID = itemID
 
     local altTexture = nil
     local altItemID = nil
@@ -762,9 +792,6 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     end)
 
-    
-    
-
     -- Create and set the count text
     local count = button.count
     if not count then
@@ -775,14 +802,20 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     
     local function setStackText()
         local item = altItemName or itemName
+        local isAltItem = true
+        if not altItemName then
+            isAltItem = false
+        end
         if IsControlKeyDown() then
             item = itemName
+            isAltItem = false
         end
         local itemCount = GetItemCount(item, false, true)
         button.count:SetText(itemCount)
+        return itemCount, isAltItem
     end
 
-    local function setStatus()
+    function button:setStatus()
         if IsControlKeyDown() then
             button.buttonTexture:SetTexture(itemTexture)
             setStackText(itemName, altItemName)
@@ -799,9 +832,13 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     setStackText()
 
+    local function handleDepteltion(isAltItem)
+        -- TODO: implement item depletion logic
+    end
+
     -- Update the item count after the macro runs
     button:HookScript("OnClick", function()
-        setStackText()
+        local itemCount, isAltItem = setStackText()
     end)
 
     -- Handle modifier key state to change the texture
@@ -809,10 +846,18 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button:RegisterEvent("PLAYER_REGEN_ENABLED")
     button:RegisterEvent("BAG_UPDATE_COOLDOWN")
     button:SetScript("OnEvent", function(self, event, key, state)
-        if event == "BAG_UPDATE_COOLDOWN" or event == "PLAYER_REGEN_ENABLED" then
-            if itemID then
-                local start, duration, enable = C_Container.GetItemCooldown(itemID)
-                CooldownFrame_Set(button.cooldown, start, duration, enable)
+        local time = GetTime()
+        if event == "BAG_UPDATE_COOLDOWN" and time - button.lastBAG_UPDATE_COOLDOWN < 0.5 then return end
+        
+        -- if actualButtonName == "DrinkOMaticCombatPotionButtonMagic Dust" then
+        --     print("Event triggered:", event, button.cooldownStarted, button.cooldownProgress)
+        -- end
+
+        if event == "BAG_UPDATE_COOLDOWN" then
+            button.lastBAG_UPDATE_COOLDOWN = time
+            button.cooldownProgress = DOM:UpdateCooldown(self)
+            if button.cooldownProgress then
+                button:AddOnUpdate()
             end
         end
         if event == "MODIFIER_STATE_CHANGED" then
@@ -823,11 +868,14 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
                     button.form:Show()
                 end
             end
-            setStatus()
+            button:setStatus()
+            if DOM.creatingButton[buttonName] then
+                print(buttonName,"is still being created, or didn't finish creation properly!")
+            end
         end
         -- if InCombatLockdown() then return end
         if event == "PLAYER_REGEN_ENABLED" then
-            setStatus()
+            button:setStatus()
         end
     end
     )
@@ -836,14 +884,47 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         GameTooltip:Hide()
     end)
 
+    function button:AddOnUpdate()
+        if self.cooldownProgress then
+            button:SetScript("OnUpdate", function(self)
+                if self.itemID then
+                    if self.cooldownProgress then
+                        local start, duration, enable = C_Container.GetItemCooldown(self.itemID)
+                        self.cooldownProgress = IsOnCooldown(start, duration)
+                    end
+                    if not self.cooldownProgress then
+                        if self.isDesaturated then
+                            self.buttonTexture:SetDesaturated(false)
+                            self.isDesaturated = false
+                            self.cooldownStarted = false
+                            self:SetScript("OnUpdate", nil)
+                        end
+                    end 
+                end
+                
+            end)
+        end
+    end
+
     -- Create and set the cooldown frame
-    button.cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
-    button.cooldown:SetSwipeColor(0, 0, 0, 0)
-    button.cooldown:SetAllPoints()
+    if not button.cooldown then
+        button.cooldown = button.cooldown or CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+        button.cooldown:SetSwipeColor(0, 0, 0, 0)
+        button.cooldown:SetAllPoints()
+        if CE then
+            button.cooldown:SetSwipeTexture(CE.CIRCLE_RED)
+            button.cooldown:SetSwipeColor(1,1,1,1)
+            button.cooldown.noTextureOverride = true
+        end
+    end
     
     if itemID then
         local start, duration, enable = C_Container.GetItemCooldown(itemID)
-        CooldownFrame_Set(button.cooldown, start, duration, enable)
+        button.cooldownProgress = IsOnCooldown(start, duration)
+        if button.cooldownProgress then
+            CooldownFrame_Set(button.cooldown, start, duration, enable, false, 1.0)
+            button:AddOnUpdate()
+        end
     end
 
     
@@ -857,8 +938,12 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         setKeybindText(button)
     end
 
+    -- button:SetParent(DOM.header)
     button:Show()
+    -- button:SetAttribute("statehidden", nil)
+    -- button:UpdateAction()
 
+    DOM.creatingButton[buttonName] = false
 end
 
 function DOM:NormalButtonDrag(button)
@@ -1153,7 +1238,7 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
     dropTarget:SetScript("OnEnter", function(self)
         self:SetBackdrop({ bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background" })
         if LibKeyBound then
-            print("KeyBound: ", buttonName, " is bound to: ", self:GetHotkey())
+            -- print("KeyBound: ", buttonName, " is bound to: ", self:GetHotkey())
             LibKeyBound:Set(self)
         end
     end)
@@ -1199,6 +1284,8 @@ end
 
 
 local lastPickConsumablesTime = 0
+local lastBagUpdate = 0
+local bagUpdateCooldown = 0.1
 local cooldownPeriod = 2 -- seconds
 
 local function amIaDruid()
@@ -1212,7 +1299,7 @@ end
 local function clearButtons()
     if InCombatLockdown() then return end
     for buttonName, button in pairs(DOM.Buttons) do
-        if button.itemName then 
+        if button.itemName and not button.isPinned then
             local itemCount = GetItemCount(button.itemName, false, false)
             if itemCount == 0 then
                 button:Hide()
@@ -1251,10 +1338,10 @@ local function sortConsumables()
 
     if DEBUG then
         for _, itemName in ipairs(sorted_drinks) do
-            print("Sorted drink: " .. itemName)
+            debugmsg("Sorted drink: " .. itemName)
         end
         for _, itemName in ipairs(sorted_conjured_drinks) do
-            print("Sorted conjured drink: " .. itemName)
+            debugmsg("Sorted conjured drink: " .. itemName)
         end
     end
 
@@ -1264,6 +1351,8 @@ end
 
 function DOM:createButtons()
     if InCombatLockdown() then return end
+    if DOM.runningButtonCreation then return end
+    DOM.runningButtonCreation = true
     clearButtons()
     -- print("Creating buttons...")
     -- Create a button for the best drink
@@ -1312,6 +1401,7 @@ function DOM:createButtons()
     if not InCombatLockdown() then
         DOM.updateNeeded = false
     end  
+    DOM.runningButtonCreation = false
 end
 
 local function selectForm()
@@ -1334,8 +1424,15 @@ local function selectForm()
         frame:SetPoint("CENTER")
     end
 
+    if frame.buttons then
+        for k, button in pairs(frame.buttons) do
+        DOM:DestroyButton(button)
+        frame.buttons[k] = nil
+        end
+    end
+
     -- Create buttons
-    local buttons = {}
+    frame.buttons =  frame.buttons or {}
 
     -- Interface\\ICONS\\9XP_Sigil_Ardenweald01
     -- Function to create a button
@@ -1400,14 +1497,14 @@ local function selectForm()
             end
         end)
 
-        buttons[spellID] = button
+        frame.buttons[spellID] = button
         DOM.Buttons[name] = button
         return button
     end
 
     -- Function to desaturate all buttons except the clicked one
     local function desaturateAll(exceptButton)
-        for _, button in pairs(buttons) do
+        for _, button in pairs(frame.buttons) do
             if button == exceptButton then
                 button:GetNormalTexture():SetDesaturated(false)
                 button.border:Show()
@@ -1463,10 +1560,10 @@ local function selectForm()
 
     -- Initial desaturation setup
     local bearID = getBearID()
-    if bearID and buttons[bearID] then
-        desaturateAll(buttons[bearID])
+    if bearID and frame.buttons[bearID] then
+        desaturateAll(frame.buttons[bearID])
     else
-        desaturateAll(buttons, nil)
+        desaturateAll(frame.buttons, nil)
     end
 
 end
@@ -1475,6 +1572,7 @@ end
 local function ThrottledPickConsumables()
     local currentTime = GetTime()
     if (currentTime - lastPickConsumablesTime) < cooldownPeriod then return end
+    if InCombatLockdown() then return end
     
     bestConsumables = GetBestConsumables()
     if bestConsumables.conjuredDrink then
@@ -1489,6 +1587,46 @@ local function ThrottledPickConsumables()
 
 end
 
+function DOM:UpdateCooldown(button)
+    if not button.itemName then return false end
+    local itemID = GetItemInfoInstant(button.itemName)
+    if itemID then
+        local start, duration, enable = C_Container.GetItemCooldown(itemID)
+        local onCooldown = IsOnCooldown(start, duration)
+        -- local actualButtonName = button:GetName()
+        -- if actualButtonName == "DrinkOMaticCombatPotionButtonMagic Dust" then
+        --     print(onCooldown, button.isDesaturated, button.cooldownStarted, " | ", start, duration)
+        -- end
+        if onCooldown then
+            if not button.isDesaturated then
+                button.buttonTexture:SetDesaturated(true)
+                button.isDesaturated = true
+            end
+            if not button.cooldownStarted then
+                button.cooldownStarted = true
+		        CooldownFrame_Set(button.cooldown, start, duration, enable)
+            end
+            return true
+        else
+            button.buttonTexture:SetDesaturated(false)
+            button.isDesaturated = false
+            button.cooldownStarted = false
+        end
+    end
+    return false 
+end
+
+local update_cooldowns_progress = false
+function DOM:UpdateCooldowns()
+    if not update_cooldowns_progress then
+        update_cooldowns_progress = true
+        for actualButtonName, button in pairs(DOM.Buttons) do
+            DOM:UpdateCooldown(button)
+        end
+        update_cooldowns_progress = false
+    end
+end
+
 
 function DOM_Initialize(self)
     -- Only subscribe to inventory updates once we're in the world
@@ -1497,7 +1635,8 @@ function DOM_Initialize(self)
     self:RegisterEvent("ZONE_CHANGED_NEW_AREA") -- Event for entering an instance or new area
     self:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND") -- Event for entering a battleground
     self:RegisterEvent("PLAYER_REGEN_ENABLED") -- Event for entering an arena
-    print("DOM initialized...")
+    self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
+    self:RegisterEvent("LEARNED_SPELL_IN_TAB")
 end
 
 
@@ -1509,7 +1648,7 @@ function DOM_OnEvent(self, event, arg1, arg2)
 
 		self:RegisterEvent("BAG_UPDATE")
 		if (InCombatLockdown()) then
-			DOM_PickFoodQueued = true
+
 		else
             C_Timer.After(10, ThrottledPickConsumables)
 		end
@@ -1520,17 +1659,22 @@ function DOM_OnEvent(self, event, arg1, arg2)
 		self:UnregisterEvent("BAG_UPDATE")
 
 	elseif (event == "BAG_UPDATE" ) then
-
+        DOM.updateNeeded = true
 		if (arg1 < 0 or arg1 > 4) then return; end	-- don't bother looking in keyring, bank, etc for food
 		if (DOM_IsSpecialBag(arg1)) then return; end	-- don't look in bags that can't hold food, either
 
-		DOM_PickFoodQueued = true
         ThrottledPickConsumables()
 
     elseif (event == "PLAYER_REGEN_ENABLED") then
-        if self.updateNeeded then
-            self:createButtons()
+        if DOM.updateNeeded then
+            DOM:createButtons()
         end
+
+    -- elseif (event == "ACTIONBAR_UPDATE_COOLDOWN") then
+    --     DOM:UpdateCooldowns()
+
+    elseif (event == "LEARNED_SPELL_IN_TAB") then
+        selectForm()
     end
 end
 
@@ -1542,13 +1686,9 @@ end
 -- end
 
 function DOM:OnInitialize()
-    print("DrinkOMatic initializing...")
-
     DOM.callbacks = DOM.callbacks or LibStub("CallbackHandler-1.0"):New(DOM)
 
     DOM.buttonNameMap = TwoWayMap:new(DOM_BoundToNames, DOM_RealNames, "GetBoundToName", "GetRealName")
-    print("OnInitialize", DOM.buttonNameMap.forward == DOM_BoundToNames)  -- Should output true
-    print("OnInitialize", DOM.buttonNameMap.reverse == DOM_RealNames)  -- Should output true
 
     DOM:CreateFrame()
     DOM_DRUID = amIaDruid()
@@ -1563,9 +1703,12 @@ function DOM:OnInitialize()
         -- _G[("BINDING_NAME_CLICK DOMButton%d"):format(k)] = ("%s %s"):format(name, L["Button %s"]:format(k))
     end
 
-    print("OnInitialize", DOM.buttonNameMap.forward == DOM_BoundToNames)  -- Should output true
-    print("OnInitialize", DOM.buttonNameMap.reverse == DOM_RealNames)  -- Should output true
-    
+end
+
+function DOM:PrintButtonNames()
+    for name, _ in pairs (DOM.Buttons) do
+        print(name)
+    end
 end
 
 function DOM:OnEnable()
@@ -1576,8 +1719,12 @@ function DOM:OnEnable()
         DOM:CheckDropTargetOverlap(x, y)
     end)
 
-    print("OnEnable", DOM.buttonNameMap.forward == DOM_BoundToNames)  -- Should output true
-    print("OnEnable", DOM.buttonNameMap.reverse == DOM_RealNames)  -- Should output true
+    if CE then
+        print("Cooldown Edge addon detected!")
+    else
+        print("Cooldown Edge addon not found, skipping enhancements.")
+    end
+
 end
 
 local function showDomHelp()
@@ -1588,12 +1735,11 @@ local function showDomHelp()
 end
 
 function DrinkOMatic_OnLoad(self)
-    print("DrinkOMatic loading...")
     DOM_Initialize(self)
     
     SLASH_DOM1 = "/dom"
     SlashCmdList["DOM"] = function(msg)
-        local cmd = (msg or ""):match("^%s*(.-)%s*$")  -- trim whitespace
+        local cmd = (msg or ""):match("^%s*(.-)%s*$")
 
         if cmd == "" then
             showDomHelp()
@@ -1603,6 +1749,8 @@ function DrinkOMatic_OnLoad(self)
         elseif cmd == "edit" then
             print("Toggling edit mode")
             DOM:ToggleEditMode()
+        elseif cmd == "list" then
+            DOM:PrintButtonNames()
         else
             print("Unknown command: " .. cmd)
             showDomHelp()
