@@ -881,9 +881,12 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     end
 
     -- Update the item count after the macro runs
-    button:HookScript("OnClick", function()
-        local itemCount, isAltItem = setStackText()
-    end)
+    if not button.stackHook then
+        button.stackHook = true
+        button:HookScript("OnClick", function()
+            local itemCount, isAltItem = setStackText()
+        end)
+    end
 
     -- Handle modifier key state to change the texture
     button:RegisterEvent("MODIFIER_STATE_CHANGED")
