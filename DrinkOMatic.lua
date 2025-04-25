@@ -1200,7 +1200,7 @@ function DOM:DestroyButton(button)
     DOM.Buttons[buttonName] = nil     -- Remove reference from DOM.Buttons
     button = nil                  -- Remove local reference, allowing Lua's garbage collector to clean up
 
-    end
+end
 
 function DOM:ExitEditMode()
     DOM.editMode = false
@@ -1345,13 +1345,19 @@ end
 
 local function clearButtons()
     if InCombatLockdown() then return end
+    local buttonsToRemove = {}
+    -- First identify buttons to remove
     for buttonName, button in pairs(DOM.Buttons) do
         if button.itemName and not button.isPinned then
             local itemCount = GetItemCount(button.itemName, false, false)
             if itemCount == 0 and not button.isPinned and not button.hasAura then
-                DOM:DestroyButton(button)
+                buttonsToRemove[buttonName] = button
             end
         end
+    end
+    -- Then remove them
+    for buttonName, button in pairs(buttonsToRemove) do
+        DOM:DestroyButton(button)
     end
 end
 
@@ -1396,11 +1402,12 @@ function DOM:createButtons()
     if InCombatLockdown() then return end
     if DOM.runningButtonCreation then return end
     DOM.runningButtonCreation = true
+    
+    -- Save current buttons that need to be cleared
     clearButtons()
     DOM.buffToButton = {}
-    -- print("Creating buttons...")
-    -- Create a button for the best drink
-
+    
+    -- Rest of button creation logic
     local sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems = sortConsumables()
     
     if sorted_drinks or sorted_conjured_drinks then
