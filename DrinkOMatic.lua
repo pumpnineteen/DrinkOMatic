@@ -62,7 +62,8 @@ DOM.buttonSize = 32 -- Size of the buttons
 DOM.itemIDMap = {} -- Table to store item IDs
 DOM.dropBaseName = "DOMButton" -- Base name for drop target buttons
 DOM.keyBoundClickButton = "LeftButton" -- Default click button for keybindings
-DOM.creatingButton = {}
+DOM.creatingButton = {} -- Button creation lock
+DOM.buffToButton = {} -- Table to store auras linked to active buttons
 
 local defaultButtonConfig = {
 	outOfRangeColoring = "button",
@@ -302,11 +303,11 @@ local healthstones
 local scrolls
 local foods
 local other_consumables
-local buffmap
+local buff_map
 
 local function get_tables()
     if IsClassicWow() or IsTBCWow() then
-        buffmap = tbc_consumables
+        buff_map = tbc_consumables
         drinks = tbc_drinks
         conjured_drinks = tbc_conjured_drinks
         healing_potions = tbc_healing_potions
@@ -646,6 +647,27 @@ function DOM:ButtonSetPoint(button, buttonName)
     end
 end
 
+function DOM:ButtonRegisterAuras(actualButtonName, itemNames)
+    for _, item in ipairs(itemNames) do
+        local itemID = GetItemInfoInstant(item)
+        if itemID and buff_map[itemID] then
+            local buffs = buff_map[itemID].buffs or {}
+            for _, buff in ipairs(buffs) do
+                if not DOM.buffToButton[buff] then DOM.buffToButton[buff] = {} end
+                table.insert(DOM.buffToButton[buff], actualButtonName)
+            end
+        end
+    end
+end
+
+-- function DOM:ButtonHasActiveAura(button)
+--     if not button.hasAura then return false end
+--     for _,active in pairs(button.hasAura) do
+--         if active then return true end
+--     end
+--     return false
+-- end
+
 local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames)
     if DOM.creatingButton[buttonName] then return end
     DOM.creatingButton[buttonName] = true
@@ -694,16 +716,35 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button.isDesaturated = false
     button.lastBAG_UPDATE_COOLDOWN = GetTime()
     button.isDesaturated = false 
+    button.hasAura = button.hasAura or false
 
     if not altItemNames then 
         button.altItemDepleted = true
+    else
+        local itemCount = (altItemNames[1] and GetItemCount(altItemNames[1], false, true)) or 0
+        if itemCount == 0 then
+            button.altItemDepleted = true
+        end 
     end
 
     if not itemNames then
         button.itemDepleted = true
+    else
+        local itemCount = (itemNames[1] and GetItemCount(itemNames[1], false, true)) or 0
+        if itemCount == 0 then
+            button.itemDepleted = true
+        end
     end
 
     DOM.Buttons[actualButtonName] = button
+
+    if not button.altItemDepleted then
+        DOM:ButtonRegisterAuras(actualButtonName, altItemNames)
+    end
+
+    if not button.itemDepleted then
+        DOM:ButtonRegisterAuras(actualButtonName, itemNames)
+    end
     
     button:SetAttribute("type", "macro")
     button:SetAttribute("macrotext", macrotext)
@@ -794,10 +835,13 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     -- Create and set the count text
     local count = button.count
+    local countFrame = button.countFrame or CreateFrame("Frame", nil, button)
     if not count then
-        count = button:CreateFontString(nil, "OVERLAY", "NumberFontNormalSmall")
+        countFrame:SetFrameLevel(1000)
+        count = countFrame:CreateFontString(nil, "OVERLAY", "NumberFontNormalSmall")
         count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
         button.count = count
+        button.countFrame = countFrame
     end
     
     local function setStackText()
@@ -943,7 +987,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     -- button:SetAttribute("statehidden", nil)
     -- button:UpdateAction()
 
-    DOM.creatingButton[buttonName] = false
+    DOM.creatingButton[buttonName] = nil
 end
 
 function DOM:NormalButtonDrag(button)
@@ -1301,12 +1345,8 @@ local function clearButtons()
     for buttonName, button in pairs(DOM.Buttons) do
         if button.itemName and not button.isPinned then
             local itemCount = GetItemCount(button.itemName, false, false)
-            if itemCount == 0 then
-                button:Hide()
-                button:UnregisterAllEvents()
-                button:SetParent(nil)
-                button = nil
-                DOM.Buttons.buttonName = nil
+            if itemCount == 0 and not button.isPinned and not button.hasAura then
+                DOM:DestroyButton(button)
             end
         end
     end
@@ -1354,6 +1394,7 @@ function DOM:createButtons()
     if DOM.runningButtonCreation then return end
     DOM.runningButtonCreation = true
     clearButtons()
+    DOM.buffToButton = {}
     -- print("Creating buttons...")
     -- Create a button for the best drink
 
@@ -1397,6 +1438,8 @@ function DOM:createButtons()
             createDrinkButton(DOM.itemIDMap[itemName], DOM_DRUID, {itemName}, "DrinkOMaticCombatPotionButton" .. itemName)
         end
     end
+
+    DOM:UpdateAuras()
 
     if not InCombatLockdown() then
         DOM.updateNeeded = false
@@ -1593,10 +1636,6 @@ function DOM:UpdateCooldown(button)
     if itemID then
         local start, duration, enable = C_Container.GetItemCooldown(itemID)
         local onCooldown = IsOnCooldown(start, duration)
-        -- local actualButtonName = button:GetName()
-        -- if actualButtonName == "DrinkOMaticCombatPotionButtonMagic Dust" then
-        --     print(onCooldown, button.isDesaturated, button.cooldownStarted, " | ", start, duration)
-        -- end
         if onCooldown then
             if not button.isDesaturated then
                 button.buttonTexture:SetDesaturated(true)
@@ -1627,6 +1666,105 @@ function DOM:UpdateCooldowns()
     end
 end
 
+function DOM:UpdateAuras()
+    -- 1. Build a table of active auras, keyed by buffID (spellId)
+    local activeAuras = {}
+    local i = 1
+    while true do
+        local name, icon, count, debuffType, duration, expirationTime, 
+              unitCaster, isStealable, nameplateShowPersonal, spellId = UnitAura("player", i)
+        if not name then break end
+
+        -- Only consider auras with a valid duration of at least 1 second and a valid spellId
+        if duration and duration >= 1 and spellId then
+            activeAuras[spellId] = {
+                name = name,
+                icon = icon,
+                duration = duration,
+                expirationTime = expirationTime,
+                startTime = expirationTime - duration,
+                spellId = spellId,
+                -- Optional: add an explicit 'priority' field here if needed.
+                priority = nil,
+            }
+        end
+        i = i + 1
+    end
+
+    -- 2. Group the active auras by button using DOM.buffToButton (buffID -> buttonName)
+    local buttonAuras = {}
+    for buffID, buttonNames in pairs(self.buffToButton) do
+        local auraData = activeAuras[buffID]
+        if auraData then
+            for _, buttonName in ipairs(buttonNames) do
+                if not buttonAuras[buttonName] then
+                    buttonAuras[buttonName] = {}
+                end
+                table.insert(buttonAuras[buttonName], auraData)
+            end
+        end
+    end
+
+    -- 3. For each button, select the highest priority aura and update the display.
+    for buttonName, auraList in pairs(buttonAuras) do
+        local buttonFrame = self.Buttons and self.Buttons[buttonName]
+        if buttonFrame then
+            -- Sort the auras so that the highest priority one comes first.
+            table.sort(auraList, function(a, b)
+                if a.priority and b.priority then
+                    return a.priority > b.priority
+                elseif a.priority then
+                    return true
+                elseif b.priority then
+                    return false
+                else
+                    return a.duration < b.duration
+                end
+            end)
+
+            local highestAura = auraList[1]
+            if highestAura then
+                -- Create or update the aura icon texture.
+                if not buttonFrame.auraTexture then
+                    buttonFrame.auraTexture = buttonFrame:CreateTexture(nil, "OVERLAY")
+                    buttonFrame.auraTexture:SetAllPoints(buttonFrame)
+                end
+                buttonFrame.auraTexture:SetTexture(highestAura.icon)
+                buttonFrame.auraTexture:Show()
+
+                -- Create or update the cooldown overlay.
+                if not buttonFrame.auraCooldown then
+                    buttonFrame.auraCooldown = CreateFrame("Cooldown", nil, buttonFrame, "CooldownFrameTemplate")
+                    buttonFrame.auraCooldown:SetAllPoints(buttonFrame)
+                    if CE then
+                        buttonFrame.auraCooldown:SetSwipeTexture(CE.CIRCLE_GREEN)
+                        buttonFrame.auraCooldown:SetSwipeColor(1,1,1,1)
+                        buttonFrame.auraCooldown.noTextureOverride = true
+                    end
+                end
+                CooldownFrame_Set(buttonFrame.auraCooldown, highestAura.startTime, highestAura.duration, true)
+                buttonFrame.auraCooldown:Show()
+                buttonFrame.hasAura = true
+            end
+        end
+    end
+
+    -- 4. For any buttons that have no active auras, clear/hide any previous aura display.
+    if self.Buttons then
+        for buttonName, buttonFrame in pairs(self.Buttons) do
+            if not buttonAuras[buttonName] then
+                if buttonFrame.auraTexture then
+                    buttonFrame.auraTexture:Hide()
+                    buttonFrame.auraTexture:SetTexture(nil)
+                    buttonFrame.hasAura = false
+                end
+                if buttonFrame.auraCooldown then
+                    buttonFrame.auraCooldown:Hide()
+                end
+            end
+        end
+    end
+end
 
 function DOM_Initialize(self)
     -- Only subscribe to inventory updates once we're in the world
@@ -1635,8 +1773,9 @@ function DOM_Initialize(self)
     self:RegisterEvent("ZONE_CHANGED_NEW_AREA") -- Event for entering an instance or new area
     self:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND") -- Event for entering a battleground
     self:RegisterEvent("PLAYER_REGEN_ENABLED") -- Event for entering an arena
-    self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
+    -- self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
     self:RegisterEvent("LEARNED_SPELL_IN_TAB")
+    self:RegisterEvent("UNIT_AURA")
 end
 
 
@@ -1659,9 +1798,10 @@ function DOM_OnEvent(self, event, arg1, arg2)
 		self:UnregisterEvent("BAG_UPDATE")
 
 	elseif (event == "BAG_UPDATE" ) then
+		if (arg1 < 0 or arg1 > 4) then return end	-- don't bother looking in keyring, bank, etc for food
+		if (DOM_IsSpecialBag(arg1)) then return end	-- don't look in bags that can't hold food, either
+        
         DOM.updateNeeded = true
-		if (arg1 < 0 or arg1 > 4) then return; end	-- don't bother looking in keyring, bank, etc for food
-		if (DOM_IsSpecialBag(arg1)) then return; end	-- don't look in bags that can't hold food, either
 
         ThrottledPickConsumables()
 
@@ -1670,8 +1810,8 @@ function DOM_OnEvent(self, event, arg1, arg2)
             DOM:createButtons()
         end
 
-    -- elseif (event == "ACTIONBAR_UPDATE_COOLDOWN") then
-    --     DOM:UpdateCooldowns()
+    elseif (event == "UNIT_AURA" and arg1 == "player") then
+        DOM:UpdateAuras()
 
     elseif (event == "LEARNED_SPELL_IN_TAB") then
         selectForm()
