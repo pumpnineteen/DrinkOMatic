@@ -138,13 +138,19 @@ local function IsRetailWow() --luacheck: ignore 212
 end
 
 local druid_exceptions = {
-    3823,   -- Lesser Invisibility Potion
-    9172,   -- Invisibility Potion
-    12190,  -- Dreamless Sleep Potion
-    20002,  -- Greater Dreamless Sleep Potion
-    4366,  -- Target Dummy
-    4392,  -- Advanced Target Dummy
-    16023,  -- Masterwork Target Dummy
+    [3823] = true,   -- Lesser Invisibility Potion
+    [9172] = true,   -- Invisibility Potion
+    [12190] = true,  -- Dreamless Sleep Potion
+    [20002] = true,  -- Greater Dreamless Sleep Potion
+    [4366] = true,  -- Target Dummy
+    [4392] = true,  -- Advanced Target Dummy
+    [16023] = true,  -- Masterwork Target Dummy
+    [13506] = true,  -- Flask of Petrification > You turn to stone, protecting you from all physical attacks and spells for 1 min, but during that time you cannot attack, move or cast spells. Counts as both a Battle and Guardian elixir.
+    -- [18297] = true,  -- Thornling Seed > Plants a Thornling which attracts nearby enemies.
+    [184937] = true,  -- Chronoboon Displacer > Alters the fabric of time, suspending beneficial world effects from dragonslaying, Dire Maul, Zul'Gurub, and Felwood.
+    [184938] = true,  -- Supercharged Chronoboon Displacer > Restores your suspended world effects.
+    [8529] = true,  -- Noggenfogger Elixir > Drink Me.
+    [8546] = true,  -- Powerful Smelling Salts > Brings a dead player back to life with 15% of their health and mana.  Cannot be used when in combat.
 }
 
 local TwoWayMap = {}
@@ -268,17 +274,6 @@ end
 
 -- -- Get value from either mapping.
 -- print("Any mapping:", map2:get("newStart"))  -- outputs "newDrop"
-
-
-local druid_exception_names = {}
-for _, itemID in ipairs(druid_exceptions) do
-    local itemName = GetItemInfoInstant(itemID)
-    if itemName then
-        druid_exception_names[itemName] = true
-    else
-        -- print("Item not found: ", itemID)
-    end
-end
 
 
 -- print("We are classical: ", IsClassicWow())
@@ -518,10 +513,11 @@ local function debug_macrotext(buttonName, itemName, itemNames, macrotext)
     print("\n" .. macrotext)
 end
 
-local function is_druid_button(tryDruid, itemName)
+local function is_druid_button(tryDruid, itemID)
     local useDruid = tryDruid
     if tryDruid then
-        if druid_exception_names and druid_exception_names[itemName] then
+        -- print("tryDruid", itemID, itemID and druid_exceptions[itemID])
+        if itemID and druid_exceptions[itemID] then
             useDruid = false
         end
         if not (IsSpellKnown(direBearFormSpellID) or 
@@ -532,7 +528,7 @@ local function is_druid_button(tryDruid, itemName)
         end
     end
 
-    debugmsg("druid:", useDruid, tryDruid, itemName)
+    debugmsg("druid:", useDruid, tryDruid, itemID)
 
     return useDruid
 end
@@ -678,7 +674,9 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         return 
     end
 
-    local useDruid = is_druid_button(tryDruid, itemName)
+    local itemID = GetItemInfoInstant(itemName)
+
+    local useDruid = is_druid_button(tryDruid, itemID)
 
     local macrotext = build_macrotext(itemNames, altItemNames, useDruid)
 
@@ -704,6 +702,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     -- local button = DOM.Buttons[actualButtonName] or  LAB:CreateButton(buttonID, actualButtonName, DOM.header)
     -- print("DrinkButton:" , button)
     button.itemName = itemName
+    button.itemID = itemID
     button.altItemName = altItemName
     button.isBoundButton = isBoundButton
     button.realButtonName = buttonName
@@ -762,8 +761,6 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     
     -- Set the button texture and icon
     local itemTexture = GetItemIcon(itemName)
-    local itemID = GetItemInfoInstant(itemName)
-    button.itemID = itemID
 
     local altTexture = nil
     local altItemID = nil
@@ -839,7 +836,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     if not count then
         countFrame:SetFrameLevel(1000)
         count = countFrame:CreateFontString(nil, "OVERLAY", "NumberFontNormalSmall")
-        count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
+        count:SetPoint("TOPLEFT", button, "TOPLEFT", 2, -2)
         button.count = count
         button.countFrame = countFrame
     end
