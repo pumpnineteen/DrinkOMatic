@@ -663,7 +663,7 @@ end
 
 function DOM:ButtonRegisterAuras(actualButtonName, itemNames)
     for _, item in ipairs(itemNames) do
-        local itemID = GetItemInfoInstant(item)
+        local itemID = DOM:GetItemID(item)
         if itemID and buff_map[itemID] then
             local buffs = buff_map[itemID].buffs or {}
             for _, buff in ipairs(buffs) do
@@ -682,6 +682,11 @@ end
 --     return false
 -- end
 
+function DOM:GetItemID(itemName)
+    local itemID = itemName and DOM.itemIDMap[itemName] or nil
+    return itemID
+end
+
 local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames)
     if DOM.creatingButton[buttonName] then return end
     DOM.creatingButton[buttonName] = true
@@ -692,7 +697,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         return 
     end
 
-    local itemID = GetItemInfoInstant(itemName)
+    local itemID = DOM:GetItemID(itemName)
 
     local useDruid = is_druid_button(tryDruid, itemID)
 
@@ -716,7 +721,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         debugmsg("Creating Bound Button: ", buttonName, " for item: ", itemName, " with actual name: ", actualButtonName, " isBoundButton: ", isBoundButton)
     end
    
-    local button = DOM.Buttons[actualButtonName] or  CreateFrame("Button", actualButtonName, UIParent, "SecureActionButtonTemplate,BackdropTemplate")
+    local button = DOM.Buttons[actualButtonName] or  CreateFrame("Button", actualButtonName, UIParent, "SecureActionButtonTemplate, BackdropTemplate")
     -- local button = DOM.Buttons[actualButtonName] or  LAB:CreateButton(buttonID, actualButtonName, DOM.header)
     -- print("DrinkButton:" , button)
     button.itemName = itemName
@@ -785,7 +790,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     if altItemName then
         altTexture = GetItemIcon(altItemName)
-        altItemID = GetItemInfoInstant(altItemName)
+        altItemID = DOM:GetItemID(altItemName)
     end
 
     local buttonTexture = button.buttonTexture
@@ -1668,7 +1673,7 @@ end
 
 function DOM:UpdateCooldown(button)
     if not button.itemName then return false end
-    local itemID = GetItemInfoInstant(button.itemName)
+    local itemID = DOM:GetItemID(button.itemName)
     if itemID then
         local start, duration, enable = C_Container.GetItemCooldown(itemID)
         local onCooldown = IsOnCooldown(start, duration)
