@@ -7636,50 +7636,70 @@ tbc_potions_group = {
 }
 
 tbc_drinks = {
-    27860,  -- Purified Draenic Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    29395,  -- Ethermead > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    29401,  -- Sparkling Southshore Cider > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    30457,  -- Gilneas Sparkling Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    32453,  -- Star's Tears > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    32668,  -- Dos Ogris > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    33042,  -- Black Coffee > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    38431,  -- Blackrock Fortified Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    28399,  -- Filtered Draenic Water > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
-    29454,  -- Silverwine > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
-    33236,  -- Fizzy Faire Drink "Classic" > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
-    38430,  -- Blackrock Mineral Water > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
-    18300,  -- Hyjal Nectar > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
-    24006,  -- Grunt's Waterskin > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
-    24007,  -- Footman's Waterskin > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
-    32455,  -- Star's Lament > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
-    23161,  -- Freshly-Squeezed Lemonade > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
-    23585,  -- Stouthammer Lite > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
-    33234,  -- Iced Berry Slush > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
-    38429,  -- Blackrock Spring Water > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
-    8766,  -- Morning Glory Dew > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
-    1645,  -- Moonberry Juice > Restores 1992 mana over 30 sec.  Must remain seated while drinking.
-    19300,  -- Bottled Winterspring Water > Restores 1992 mana over 30 sec.  Must remain seated while drinking.
-    10841,  -- Goldthorn Tea > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
-    1708,  -- Sweet Nectar > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
-    4791,  -- Enchanted Water > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
-    1205,  -- Melon Juice > Restores 835 mana over 24 sec.  Must remain seated while drinking.
-    19299,  -- Fizzy Faire Drink > Restores 835 mana over 24 sec.  Must remain seated while drinking.
-    9451,  -- Bubbling Water > Restores 835 mana over 24 sec.  Must remain seated while drinking.
-    1179,  -- Ice Cold Milk > Restores 437 mana over 21 sec.  Must remain seated while drinking.
-    17404,  -- Blended Bean Brew > Restores 437 mana over 21 sec.  Must remain seated while drinking.
-    159,  -- Refreshing Spring Water > Restores 151 mana over 18 sec.  Must remain seated while drinking.
+    27860,  -- Purified Draenic Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    29395,  -- Ethermead > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    29401,  -- Sparkling Southshore Cider > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    30457,  -- Gilneas Sparkling Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    32453,  -- Star's Tears > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    32668,  -- Dos Ogris > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    33042,  -- Black Coffee > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    34780,  -- Naaru Ration > Restores 7500 health and 7200 mana over 30 sec.  Must remain seated while eating.
+    38431,  -- Blackrock Fortified Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    28399,  -- Filtered Draenic Water > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
+    29454,  -- Silverwine > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
+    32722,  -- Enriched Terocone Juice > Restores 4320 health and 5100 mana over 30 sec.  Must remain seated while drinking.
+    33236,  -- Fizzy Faire Drink "Classic" > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
+    38430,  -- Blackrock Mineral Water > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
+    13724,  -- Enriched Manna Biscuit > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.
+    19060,  -- Warsong Gulch Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Warsong Gulch.
+    19301,  -- Alterac Manna Biscuit > Restores 4410 health and 4410 mana over 30 sec.  Must remain seated while eating.
+    20031,  -- Essence Mango > Restores 4320 health and 4410 mana over 30 sec.  Must remain seated while eating.
+    20062,  -- Arathi Basin Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    20222,  -- Defiler's Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    20225,  -- Highlander's Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    18300,  -- Hyjal Nectar > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
+    24006,  -- Grunt's Waterskin > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
+    24007,  -- Footman's Waterskin > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
+    32455,  -- Star's Lament > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
+    19061,  -- Warsong Gulch Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Warsong Gulch.
+    20064,  -- Arathi Basin Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    20224,  -- Defiler's Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    20227,  -- Highlander's Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    23161,  -- Freshly-Squeezed Lemonade > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
+    23585,  -- Stouthammer Lite > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
+    33234,  -- Iced Berry Slush > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
+    38429,  -- Blackrock Spring Water > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
+    8766,  -- Morning Glory Dew > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
+    19062,  -- Warsong Gulch Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Warsong Gulch.
+    20063,  -- Arathi Basin Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    20223,  -- Defiler's Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    20226,  -- Highlander's Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
+    1645,  -- Moonberry Juice > Restores 1992 mana over 30 sec.  Must remain seated while drinking.
+    19300,  -- Bottled Winterspring Water > Restores 1992 mana over 30 sec.  Must remain seated while drinking.
+    10841,  -- Goldthorn Tea > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
+    1708,  -- Sweet Nectar > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
+    4791,  -- Enchanted Water > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
+    1205,  -- Melon Juice > Restores 835 mana over 24 sec.  Must remain seated while drinking.
+    19299,  -- Fizzy Faire Drink > Restores 835 mana over 24 sec.  Must remain seated while drinking.
+    9451,  -- Bubbling Water > Restores 835 mana over 24 sec.  Must remain seated while drinking.
+    1179,  -- Ice Cold Milk > Restores 437 mana over 21 sec.  Must remain seated while drinking.
+    17404,  -- Blended Bean Brew > Restores 437 mana over 21 sec.  Must remain seated while drinking.
+    2682,  -- Cooked Crab Claw > Restores 294 health and 294 mana over 21 sec. Must remain seated while eating.
+    3448,  -- Senggin Root > Restores 294 health and 294 mana over 21 sec. Must remain seated while eating.
+    159,  -- Refreshing Spring Water > Restores 151 mana over 18 sec.  Must remain seated while drinking.
 }
 
 tbc_conjured_drinks = {
-    22018,  -- Conjured Glacier Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
-    30703,  -- Conjured Mountain Spring Water > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
-    8079,  -- Conjured Crystal Water > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
-    8078,  -- Conjured Sparkling Water > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
-    8077,  -- Conjured Mineral Water > Restores 1992 mana over 30 sec.  Must remain seated while drinking.
-    3772,  -- Conjured Spring Water > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
-    2136,  -- Conjured Purified Water > Restores 835 mana over 24 sec.  Must remain seated while drinking.
-    2288,  -- Conjured Fresh Water > Restores 437 mana over 21 sec.  Must remain seated while drinking.
-    5350,  -- Conjured Water > Restores 151 mana over 18 sec.  Must remain seated while drinking.
+    22018,  -- Conjured Glacier Water > Restores 7200 mana over 30 sec.  Must remain seated while drinking.
+    34062,  -- Conjured Manna Biscuit > Restores 7500 health and 7200 mana over 30 sec.  Must remain seated while eating.
+    30703,  -- Conjured Mountain Spring Water > Restores 5100 mana over 30 sec.  Must remain seated while drinking.
+    8079,  -- Conjured Crystal Water > Restores 4200 mana over 30 sec.  Must remain seated while drinking.
+    8078,  -- Conjured Sparkling Water > Restores 2934 mana over 30 sec.  Must remain seated while drinking.
+    8077,  -- Conjured Mineral Water > Restores 1992 mana over 30 sec.  Must remain seated while drinking.
+    3772,  -- Conjured Spring Water > Restores 1345 mana over 27 sec.  Must remain seated while drinking.
+    2136,  -- Conjured Purified Water > Restores 835 mana over 24 sec.  Must remain seated while drinking.
+    2288,  -- Conjured Fresh Water > Restores 437 mana over 21 sec.  Must remain seated while drinking.
+    5350,  -- Conjured Water > Restores 151 mana over 18 sec.  Must remain seated while drinking.
 }
 
 tbc_mana_gems = {
@@ -7848,66 +7868,258 @@ tbc_scrolls = {
     27503,  -- Scroll of Strength V > Increases the target's Strength by 20 for 30 min.
 }
 
-tbc_foods = {
-    19301,  -- Alterac Manna Biscuit > Restores 4410 health and 4410 mana over 30 sec.  Must remain seated while eating.
-    8932,  -- Alterac Swiss > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    20062,  -- Arathi Basin Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    20063,  -- Arathi Basin Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    20064,  -- Arathi Basin Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    17199,  -- Bad Egg Nog > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
+tbc_nonbuff_foods = {
+    35710,  -- Delicious Baked Ham > Restores 7800 health over 30 sec.  Must remain seated while eating.
+    29394,  -- Lyribread > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    29448,  -- Mag'har Mild Cheese > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    29449,  -- Bladespire Bagel > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    29450,  -- Telaari Grapes > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    29451,  -- Clefthoof Ribs > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    29452,  -- Zangar Trout > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    29453,  -- Sporeggar Mushroom > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    30355,  -- Grilled Shadowmoon Tuber > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    32685,  -- Ogri'la Chicken Fingers > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    33048,  -- Stewed Trout > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    33254,  -- Forest Strider Drumstick > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    38428,  -- Rock-Salted Pretzel > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    24408,  -- Edible Stalks > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27661,  -- Blackened Trout > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27854,  -- Smoked Talbuk Venison > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27855,  -- Mag'har Grainbread > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27856,  -- Skethyl Berries > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27857,  -- Garadar Sharp > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27858,  -- Sunspring Carp > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    27859,  -- Zangar Caps > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    28486,  -- Moser's Magnificent Muffin > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    29393,  -- Diamond Berries > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    29402,  -- Jessen's Special Slop OLD > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    29412,  -- Jessen's Special Slop > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    30458,  -- Stromgarde Muenster > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    30610,  -- Smoked Black Bear Meat > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    33246,  -- Funnel Cake > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    38427,  -- Pickled Egg > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    35565,  -- Juicy Bear Burger > Restores 1933.2 health over 27 sec.   Must remain seated while eating.   If you eat for 10 seconds will also increase your damage and healing from magical spells and effects by up to 14 for 15 min.
+    11415,  -- Mixed Berries > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    11444,  -- Grim Guzzler Boar > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    12763,  -- Un'Goro Etherfruit > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    13933,  -- Lobster Stew > Restores 2148 health over 30 sec.  Must remain seated while eating.
     13935,  -- Baked Salmon > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    16171,  -- Shinsollo > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    19225,  -- Deep Fried Candybar > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    21031,  -- Cabbage Kimchi > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    21033,  -- Radish Kimchi > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    22324,  -- Winter Kimchi > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    23160,  -- Friendship Bread > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    24338,  -- Hellfire Spineleaf > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8932,  -- Alterac Swiss > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8948,  -- Dried King Bolete > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8950,  -- Homemade Cherry Pie > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8952,  -- Roasted Quail > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8953,  -- Deep Fried Plantains > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8957,  -- Spinefin Halibut > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    13546,  -- Bloodbelly Fish > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    13893,  -- Large Raw Mightfish > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    13930,  -- Filet of Redgill > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    16168,  -- Heaven Peach > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    16766,  -- Undermine Clam Chowder > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    17408,  -- Spicy Beefstick > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    18255,  -- Runn Tum Tuber > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    18635,  -- Bellara's Nutterbar > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    19306,  -- Crunchy Frog > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    21030,  -- Darnassus Kimchi Pie > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    21552,  -- Striped Yellowtail > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    3927,  -- Fine Aged Cheddar > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    4599,  -- Cured Ham Steak > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    4601,  -- Soft Banana Bread > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    4602,  -- Moon Harvest Pumpkin > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    4608,  -- Raw Black Truffle > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    6887,  -- Spotted Yellowtail > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    9681,  -- Grilled King Crawler Legs > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    13755,  -- Winter Squid > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    13928,  -- Grilled Squid > Restores 874.8 health over 27 sec.   Must remain seated while eating.   If you eat for 10 seconds will also increase your Agility by 10 for 10 min.
+    13931,  -- Nightfin Soup > Restores 874.8 health over 27 sec.   Must remain seated while eating.   Also restores 8 Mana every 5 seconds for 10 min.
+    13932,  -- Poached Sunscale Salmon > Restores 874.8 health over 27 sec.   Must remain seated while eating.   Also restores 6 health every 5 seconds for 10 min.
+    16169,  -- Wild Ricecake > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    1707,  -- Stormwind Brie > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    17407,  -- Graccu's Homemade Meat Pie > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    18632,  -- Moonbrook Riot Taffy > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    19224,  -- Red Hot Wings > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    3771,  -- Wild Hog Shank > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    4539,  -- Goldenbark Apple > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    4544,  -- Mulgore Spice Bread > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    4594,  -- Rockscale Cod > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    4607,  -- Delicious Cave Mold > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    6807,  -- Frog Leg Stew > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    8364,  -- Mithril Head Trout > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    8543,  -- Underwater Mushroom Cap > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    1119,  -- Bottled Spirits > Restores 552 health over 24 sec.  Must remain seated while eating.
+    16170,  -- Steamed Mandu > Restores 552 health over 24 sec.  Must remain seated while eating.
+    19305,  -- Pickled Kodo Foot > Restores 552 health over 24 sec.  Must remain seated while eating.
+    2685,  -- Succulent Pork Ribs > Restores 552 health over 24 sec.  Must remain seated while eating.
+    3770,  -- Mutton Chop > Restores 552 health over 24 sec.  Must remain seated while eating.
+    422,  -- Dwarven Mild > Restores 552 health over 24 sec.  Must remain seated while eating.
+    4538,  -- Snapvine Watermelon > Restores 552 health over 24 sec.  Must remain seated while eating.
+    4542,  -- Moist Cornbread > Restores 552 health over 24 sec.  Must remain seated while eating.
+    4593,  -- Bristle Whisker Catfish > Restores 552 health over 24 sec.  Must remain seated while eating.
+    4606,  -- Spongy Morel > Restores 552 health over 24 sec.  Must remain seated while eating.
+    5478,  -- Dig Rat Stew > Restores 552 health over 24 sec.  Must remain seated while eating.
+    5526,  -- Clam Chowder > Restores 552 health over 24 sec.  Must remain seated while eating.
+    5845,  -- Flank of Meat > Restores 552 health over 24 sec.  Must remain seated while eating.
+    7228,  -- Tigule's Strawberry Ice Cream > Restores 552 health over 24 sec.  Must remain seated while eating.
+    733,  -- Westfall Stew > Restores 552 health over 24 sec.  Must remain seated while eating.
+    12238,  -- Darkshore Grouper > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    1326,  -- Sauteed Sunfish > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    16167,  -- Versicolor Treat > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    17119,  -- Deeprun Rat Kabob > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    17406,  -- Holiday Cheesewheel > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    18633,  -- Styleen's Sour Suckerpop > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    19304,  -- Spiced Beef Jerky > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    2287,  -- Haunch of Meat > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    24072,  -- Sand Pear Pie > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    414,  -- Dalaran Sharp > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    4537,  -- Tel'Abim Banana > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    4541,  -- Freshly Baked Bread > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    4592,  -- Longjaw Mud Snapper > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    4605,  -- Red-speckled Mushroom > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    5066,  -- Fissure Plant > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    5095,  -- Rainbow Fin Albacore > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    6316,  -- Loch Frenzy Delight > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    6890,  -- Smoked Bear Meat > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    117,  -- Tough Jerky > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    16166,  -- Bean Soup > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    17344,  -- Candy Cane > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    19223,  -- Darkmoon Dog > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    2070,  -- Darnassian Bleu > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    20857,  -- Honey Bread > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    23495,  -- Springpaw Appetizer > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    2679,  -- Charred Wolf Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    2681,  -- Roasted Boar Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    30816,  -- Spice Bread > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    4536,  -- Shiny Red Apple > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    4540,  -- Tough Hunk of Bread > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    4604,  -- Forest Mushroom Cap > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    4656,  -- Small Pumpkin > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    5057,  -- Ripe Watermelon > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    6290,  -- Brilliant Smallfish > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    6458,  -- Oil Covered Fish > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    7097,  -- Leg Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    787,  -- Slitherskin Mackerel > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    961,  -- Healing Herb > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+    11109,  -- Special Chicken Feed > Restores 30 health over 15 sec.  Must remain seated while eating.
+    6299,  -- Sickly Looking Fish > Restores 30 health over 15 sec.  Must remain seated while eating.
+}
+
+tbc_conjured_nonbuff_foods = {
+    22019,  -- Conjured Croissant > Restores 7500 health over 30 sec.  Must remain seated while eating.
+    22895,  -- Conjured Cinnamon Roll > Restores 4320 health over 30 sec.  Must remain seated while eating.
+    8076,  -- Conjured Sweet Roll > Restores 2148 health over 30 sec.  Must remain seated while eating.
+    8075,  -- Conjured Sourdough > Restores 1392 health over 30 sec.  Must remain seated while eating.
+    1487,  -- Conjured Pumpernickel > Restores 874.8 health over 27 sec.  Must remain seated while eating.
+    1114,  -- Conjured Rye > Restores 552 health over 24 sec.  Must remain seated while eating.
+    1113,  -- Conjured Bread > Restores 243.6 health over 21 sec.  Must remain seated while eating.
+    5349,  -- Conjured Muffin > Restores 61.2 health over 18 sec.  Must remain seated while eating.
+}
+
+tbc_percent_nonbuff_foods = {
+    19696,  -- Harvest Bread > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    19994,  -- Harvest Fruit > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    19995,  -- Harvest Boar > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    19996,  -- Harvest Fish > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    19997,  -- Harvest Nectar > Restores 2% of your mana per second for 30 sec.  Must remain seated while drinking.
+    21235,  -- Winter Veil Roast > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    21236,  -- Winter Veil Loaf > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    21240,  -- Winter Veil Candy > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
+    21241,  -- Winter Veil Eggnog > Restores 2% of your mana per second for 30 sec.  Must remain seated while drinking.
+}
+
+tbc_alcohol = {
+    12003,  -- Dark Dwarven Lager > An extremely potent alcoholic beverage.
+    19221,  -- Darkmoon Special Reserve > An extremely potent alcoholic beverage.
+    23584,  -- Loch Modan Lager > An extremely potent alcoholic beverage.
+    23848,  -- Nethergarde Bitter > An extremely potent alcoholic beverage.
+    38466,  -- Sulfuron Slammer > An extremely potent flaming alcoholic beverage.
+    9361,  -- Cuergo's Gold with Worm > An extremely potent alcoholic beverage.
+    17402,  -- Greatfather's Winter Ale > A strong alcoholic beverage.
+    18288,  -- Molasses Firewater > A strong alcoholic beverage.
+    23586,  -- Aerie Peak Pale Ale > A strong alcoholic beverage.
+    23704,  -- Eversong Port > A strong alcoholic beverage.
+    2594,  -- Flagon of Dwarven Honeymead > A strong alcoholic beverage.
+    2595,  -- Jug of Badlands Bourbon > A strong alcoholic beverage.
+    28284,  -- Don Carlos Tequila > A strong alcoholic beverage.
+    29112,  -- Cenarion Spirits > A strong alcoholic beverage.
+    30309,  -- Stonebreaker Brew > A strong alcoholic beverage.
+    30499,  -- Brightsong Wine > A strong alcoholic beverage.
+    30858,  -- Peon Sleep Potion > A strong alcoholic beverage.
+    32667,  -- Bash Ale > A strong alcoholic beverage.
+    33929,  -- Brewfest Brew > A strong alcoholic beverage.
+    38432,  -- Plugger's Blackrock Ale > A strong alcoholic beverage.
+    4595,  -- Junglevine Wine > A strong alcoholic beverage.
+    4600,  -- Cherry Grog > A strong alcoholic beverage.
+    9260,  -- Volatile Rum > A strong alcoholic beverage.
+    9360,  -- Cuergo's Gold > A strong alcoholic beverage.
+    11846,  -- Wizbang's Special Brew > A typical alcoholic beverage.
+    17403,  -- Steamwheedle Fizzy Spirits > A typical alcoholic beverage.
+    18287,  -- Evermurky > A typical alcoholic beverage.
+    2593,  -- Flask of Stormwind Tawny > A typical alcoholic beverage.
+    2596,  -- Skin of Dwarven Stout > A typical alcoholic beverage.
+    3703,  -- Southshore Stout > A typical alcoholic beverage.
+    17196,  -- Holiday Spirits > A fairly weak alcoholic beverage.
+    19222,  -- Cheap Beer > A fairly weak alcoholic beverage.
+    23492,  -- Suntouched Special Reserve > A fairly weak alcoholic beverage.
+    2686,  -- Thunder Ale > A fairly weak alcoholic beverage.
+    2723,  -- Bottle of Dalaran Noir > A fairly weak alcoholic beverage.
+    2894,  -- Rhapsody Malt > A fairly weak alcoholic beverage.
+    37488,  -- Wild Winter Pilsner > A weak alcohol that may bring out the beast in you.
+    37489,  -- Izzard's Ever Flavor > A weak alcohol that has a lot of head.
+    37490,  -- Aromatic Honey Brew > Weak alcohol with some big taste!
+    37491,  -- Metok's Bubble Bock > Weak alcohol with a light and refreshing taste.
+    37492,  -- Springtime Stout > A weak alcohol that will put some Spring in your step.
+    37494,  -- Stranglethorn Brew > A weak alcohol from the deepest reaches of the jungle.
+    37495,  -- Draenic Pale Ale > Weak, but smooth, alcohol.
+    37496,  -- Binary Brew > A weak alcohol, but a technological triumph in brewing technology.
+    37497,  -- Autumnal Acorn Ale > A weak alcohol that's good for you and good for nature.
+    37898,  -- Wild Winter Pilsner > A weak alcohol that may bring out the beast in you.
+    37899,  -- Izzard's Ever Flavor > A weak alcohol that has a lot of head.
+    37900,  -- Aromatic Honey Brew > Weak alcohol with some big taste!
+    37901,  -- Metok's Bubble Bock > Weak alcohol with a light and refreshing taste.
+    37902,  -- Springtime Stout > A weak alcohol that will put some Spring in your step.
+    37904,  -- Stranglethorn Brew > A weak alcohol from the deepest reaches of the jungle.
+    37905,  -- Draenic Pale Ale > Weak, but smooth, alcohol.
+    37906,  -- Binary Brew > A weak alcohol, but a technological triumph in brewing technology.
+    37907,  -- Autumnal Acorn Ale > A weak alcohol that's good for you and good for nature.
+}
+
+tbc_foods = {
+    17199,  -- Bad Egg Nog > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     4457,  -- Barbecued Buzzard Wing > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
     33030,  -- Barleybrew Clear > Restores 151 mana over 18 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 2 Stamina and Spirit for 15 min. Standard alcohol.
     33029,  -- Barleybrew Dark > Restores 835 mana over 24 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 6 Stamina and Spirit for 15 min. Standard alcohol.
     33028,  -- Barleybrew Light > Restores 437 mana over 21 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 4 Stamina and Spirit for 15 min. Standard alcohol.
     27636,  -- Bat Bites > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    16166,  -- Bean Soup > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     2888,  -- Beer Basted Boar Ribs > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
-    18635,  -- Bellara's Nutterbar > Restores 1392 health over 30 sec.  Must remain seated while eating.
     3726,  -- Big Bear Steak > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     27657,  -- Blackened Basilisk > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 23 Spell Damage and 20 Spirit for 30 min.
     27663,  -- Blackened Sporefish > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and 8 Mana every 5 seconds for 30 min.
-    27661,  -- Blackened Trout > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    29449,  -- Bladespire Bagel > Restores 7500 health over 30 sec.  Must remain seated while eating.
     13810,  -- Blessed Sunfruit > Restores 1933.2 health over 27 sec.  Must remain seated while eating. Also increases your Strength by 10 for 10 min.
     13813,  -- Blessed Sunfruit Juice > Restores 4410 mana over 30 sec.  Must remain seated while drinking.  Also increases your Spirit by 10 for 10 min.
     3220,  -- Blood Sausage > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    13546,  -- Bloodbelly Fish > Restores 1392 health over 30 sec.  Must remain seated while eating.
     20516,  -- Bobbing Apple > Restores 2% of your health per second for 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain Stamina and Spirit for 15 min.
     5525,  -- Boiled Clams > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
     29293,  -- Bonestripper Buzzard Hotwings > Restores 2148 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 14 Stamina and Spirit for 15 min.
     19318,  -- Bottled Alterac Spring Water > Restores 4410 mana over 30 sec.  Must remain seated while drinking.  Also increases your Spirit by 10 for 10 min.
-    1119,  -- Bottled Spirits > Restores 552 health over 24 sec.  Must remain seated while eating.
     34021,  -- Brewdoo Magic > Restores 1992 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 12 Stamina and Spirit for 15 min. Standard alcohol.
-    6290,  -- Brilliant Smallfish > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    4593,  -- Bristle Whisker Catfish > Restores 552 health over 24 sec.  Must remain seated while eating.
     33867,  -- Broiled Bloodfin > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 resistance to all schools of magic for 30 min.
     27651,  -- Buzzard Bites > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
-    21031,  -- Cabbage Kimchi > Restores 2148 health over 30 sec.  Must remain seated while eating.
     11584,  -- Cactus Apple Surprise > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     20390,  -- Candy Bar > Restores 3% of your health and mana per second for 25 sec.  Must remain seated while eating.
     7807,  -- Candy Bar > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
-    17344,  -- Candy Cane > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     20389,  -- Candy Corn > Restores 3% of your health and mana per second for 25 sec.  Must remain seated while eating.
     12213,  -- Carrion Surprise > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
     35563,  -- Charred Bear Kabobs > Restores 1933.2 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 24 attack power for 15 min.
-    2679,  -- Charred Wolf Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     7808,  -- Chocolate Square > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     30155,  -- Clam Bar > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
-    5526,  -- Clam Chowder > Restores 552 health over 24 sec.  Must remain seated while eating.
     16971,  -- Clamlette Surprise > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
     33004,  -- Clamlette Surprise > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
-    29451,  -- Clefthoof Ribs > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    1113,  -- Conjured Bread > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    22895,  -- Conjured Cinnamon Roll > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    22019,  -- Conjured Croissant > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    34062,  -- Conjured Manna Biscuit > Restores 7500 health and 7200 mana over 30 sec.  Must remain seated while eating.
-    5349,  -- Conjured Muffin > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    1487,  -- Conjured Pumpernickel > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    1114,  -- Conjured Rye > Restores 552 health over 24 sec.  Must remain seated while eating.
-    8075,  -- Conjured Sourdough > Restores 1392 health over 30 sec.  Must remain seated while eating.
-    8076,  -- Conjured Sweet Roll > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    2682,  -- Cooked Crab Claw > Restores 294 health and 294 mana over 21 sec. Must remain seated while eating.
     13927,  -- Cooked Glossy Mightfish > Restores 874.8 health over 27 sec.   Must remain seated while eating.   Also increases your Stamina by 10 for 10 min.
     23756,  -- Cookie's Jumbo Gumbo > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     2684,  -- Coyote Steak > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
@@ -7916,255 +8128,109 @@ tbc_foods = {
     5479,  -- Crispy Lizard Tail > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     3664,  -- Crocolisk Gumbo > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     3662,  -- Crocolisk Steak > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    19306,  -- Crunchy Frog > Restores 1392 health over 30 sec.  Must remain seated while eating.
     31673,  -- Crunchy Serpent > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 23 Spell Damage and 20 Spirit for 30 min.
     22645,  -- Crunchy Spider Surprise > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    4599,  -- Cured Ham Steak > Restores 1392 health over 30 sec.  Must remain seated while eating.
     3665,  -- Curiously Tasty Omelet > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
-    414,  -- Dalaran Sharp > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    19223,  -- Darkmoon Dog > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    12238,  -- Darkshore Grouper > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    2070,  -- Darnassian Bleu > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    21030,  -- Darnassus Kimchi Pie > Restores 1392 health over 30 sec.  Must remain seated while eating.
-    19225,  -- Deep Fried Candybar > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    8953,  -- Deep Fried Plantains > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    17119,  -- Deeprun Rat Kabob > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    20222,  -- Defiler's Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    20223,  -- Defiler's Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    20224,  -- Defiler's Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    35710,  -- Delicious Baked Ham > Restores 7800 health over 30 sec.  Must remain seated while eating.
-    4607,  -- Delicious Cave Mold > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    29393,  -- Diamond Berries > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    5478,  -- Dig Rat Stew > Restores 552 health over 24 sec.  Must remain seated while eating.
     21023,  -- Dirge's Kickin' Chimaerok Chops > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 25 Stamina for 15 min.
     24009,  -- Dried Fruit Rations > Restores 4320 health over 30 sec.   Must remain seated while eating.   Also increases your Stamina by 10 for 10 min.
-    8948,  -- Dried King Bolete > Restores 2148 health over 30 sec.  Must remain seated while eating.
     24008,  -- Dried Mushroom Rations > Restores 4320 health over 30 sec.   Must remain seated while eating.   Also increases your Stamina by 10 for 10 min.
     34063,  -- Dried Sausage > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     2687,  -- Dry Pork Ribs > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    422,  -- Dwarven Mild > Restores 552 health over 24 sec.  Must remain seated while eating.
     24540,  -- Edible Fern > Restores 2148 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 14 Stamina and Spirit for 15 min.
-    24408,  -- Edible Stalks > Restores 4320 health over 30 sec.  Must remain seated while eating.
     17198,  -- Egg Nog > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.  Also packs quite a kick...
-    13724,  -- Enriched Manna Biscuit > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.
-    32722,  -- Enriched Terocone Juice > Restores 4320 health and 5100 mana over 30 sec.  Must remain seated while drinking.
-    20031,  -- Essence Mango > Restores 4320 health and 4410 mana over 30 sec.  Must remain seated while eating.
     27662,  -- Feltail Delight > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
     21537,  -- Festival Dumplings > Restores 4% of your health and 3% of your mana per second for 25 sec.  Must remain seated while eating.
-    13930,  -- Filet of Redgill > Restores 1392 health over 30 sec.  Must remain seated while eating.
     5476,  -- Fillet of Frenzy > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    3927,  -- Fine Aged Cheddar > Restores 1392 health over 30 sec.  Must remain seated while eating.
     33052,  -- Fisherman's Feast > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 30 Stamina and 20 Spirit for 30 min.
-    5066,  -- Fissure Plant > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     23176,  -- Fizzy Energy Drink > Restores 840.0 health and 1260 mana over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become refreshed and gain 6 Mana every 5 seconds for 15 min.
-    5845,  -- Flank of Meat > Restores 552 health over 24 sec.  Must remain seated while eating.
-    4604,  -- Forest Mushroom Cap > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    33254,  -- Forest Strider Drumstick > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    4541,  -- Freshly Baked Bread > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    23160,  -- Friendship Bread > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    6807,  -- Frog Leg Stew > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    33246,  -- Funnel Cake > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    27857,  -- Garadar Sharp > Restores 4320 health over 30 sec.  Must remain seated while eating.
     6038,  -- Giant Clam Scorcho > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
     17197,  -- Gingerbread Cookie > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     5527,  -- Goblin Deviled Clams > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     27666,  -- Golden Fish Sticks > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and increase healing done by 44 and Spirit by 20 for 30 min.
-    4539,  -- Goldenbark Apple > Restores 874.8 health over 27 sec.  Must remain seated while eating.
     3666,  -- Gooey Spider Cake > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     33034,  -- Gordok Grog > Restores 4200 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 20 Stamina and Spirit for 30 min. Standard alcohol.
     724,  -- Goretusk Liver Pie > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    17407,  -- Graccu's Homemade Meat Pie > Restores 874.8 health over 27 sec.  Must remain seated while eating.
     21215,  -- Graccu's Mince Meat Fruitcake > Restores 5% of your health and mana per second for 20 sec.  Must remain seated while eating.  You should also probably like the taste of fruitcake.
     1401,  -- Green Tea Leaf > Instantly heals 30 damage.  Also restores 60 mana over 10 sec.  Must remain seated while drinking.
-    9681,  -- Grilled King Crawler Legs > Restores 1392 health over 30 sec.  Must remain seated while eating.
     27664,  -- Grilled Mudfish > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Agility and Spirit for 30 min.
     32563,  -- Grilled Picnic Treat > A delicious grilled treat of questionable nutritional value.  Must remain seated while eating.
-    30355,  -- Grilled Shadowmoon Tuber > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    13928,  -- Grilled Squid > Restores 874.8 health over 27 sec.   Must remain seated while eating.   If you eat for 10 seconds will also increase your Agility by 10 for 10 min.
-    11444,  -- Grim Guzzler Boar > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    19995,  -- Harvest Boar > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
-    19696,  -- Harvest Bread > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
-    19996,  -- Harvest Fish > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
-    19994,  -- Harvest Fruit > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
-    19997,  -- Harvest Nectar > Restores 2% of your mana per second for 30 sec.  Must remain seated while drinking.
-    2287,  -- Haunch of Meat > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    961,  -- Healing Herb > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    16168,  -- Heaven Peach > Restores 1392 health over 30 sec.  Must remain seated while eating.
     20074,  -- Heavy Crocolisk Stew > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
     12215,  -- Heavy Kodo Stew > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
     29292,  -- Helboar Bacon > Restores 2148 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Strength for 15 min.
-    24338,  -- Hellfire Spineleaf > Restores 2148 health over 30 sec.  Must remain seated while eating.
     6888,  -- Herb Baked Egg > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
-    20225,  -- Highlander's Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    20226,  -- Highlander's Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    20227,  -- Highlander's Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Arathi Basin.
-    17406,  -- Holiday Cheesewheel > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    8950,  -- Homemade Cherry Pie > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    20857,  -- Honey Bread > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     34410,  -- Honeyed Holiday Ham > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
     34411,  -- Hot Apple Cider > Restores 7200 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become well fed and gain 20 Stamina and Spirit for 30 min. Standard alcohol.
     33053,  -- Hot Buttered Trout > Restores 7500 health and 7200 mana over 30 sec.  Must remain seated while eating.
     3727,  -- Hot Lion Chops > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     13929,  -- Hot Smoked Bass > Restores 874.8 health over 27 sec.   Must remain seated while eating.   Also increases your Spirit by 10 for 10 min.
     13851,  -- Hot Wolf Ribs > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
-    29412,  -- Jessen's Special Slop > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    29402,  -- Jessen's Special Slop OLD > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    35565,  -- Juicy Bear Burger > Restores 1933.2 health over 27 sec.   Must remain seated while eating.   If you eat for 10 seconds will also increase your damage and healing from magical spells and effects by up to 14 for 15 min.
     34020,  -- Jungle River Water > Restores 1345 mana over 27 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 8 Stamina and Spirit for 15 min. Standard alcohol.
     12212,  -- Jungle Stew > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
     5472,  -- Kaldorei Spider Kabob > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
-    13893,  -- Large Raw Mightfish > Restores 1392 health over 30 sec.  Must remain seated while eating.
     5480,  -- Lean Venison > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     12209,  -- Lean Wolf Steak > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
-    7097,  -- Leg Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    13933,  -- Lobster Stew > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    6316,  -- Loch Frenzy Delight > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     20388,  -- Lollipop > Restores 3% of your health and mana per second for 25 sec.  Must remain seated while eating.
     7806,  -- Lollipop > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     34018,  -- Long Stride Brew > Restores 437 mana over 21 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 4 Stamina and Spirit for 15 min. Standard alcohol.
-    4592,  -- Longjaw Mud Snapper > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     27635,  -- Lynx Steak > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
-    29394,  -- Lyribread > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    27855,  -- Mag'har Grainbread > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    29448,  -- Mag'har Mild Cheese > Restores 7500 health over 30 sec.  Must remain seated while eating.
     24539,  -- Marsh Lichen > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 10 Spirit for 10 min.
     13934,  -- Mightfish Steak > Restores 4320 health over 30 sec.   Must remain seated while eating.   Also increases your Stamina by 10 for 10 min.
     32686,  -- Mingo's Fortune Giblets > Restores 7500 health over 30 sec.  Must remain seated while eating. If you spend at least 25 seconds eating, you'll discover the fortune hidden in your meal!
-    8364,  -- Mithril Head Trout > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    11415,  -- Mixed Berries > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    4542,  -- Moist Cornbread > Restores 552 health over 24 sec.  Must remain seated while eating.
     31672,  -- Mok'Nathal Shortribs > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
     12218,  -- Monster Omelet > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
-    4602,  -- Moon Harvest Pumpkin > Restores 1392 health over 30 sec.  Must remain seated while eating.
-    18632,  -- Moonbrook Riot Taffy > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    28486,  -- Moser's Magnificent Muffin > Restores 4320 health over 30 sec.  Must remain seated while eating.
     33036,  -- Mudder's Milk > Restores 7200 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 20 Strength and Spirit for 30 min. Strong alcohol.
-    4544,  -- Mulgore Spice Bread > Restores 874.8 health over 27 sec.  Must remain seated while eating.
     3663,  -- Murloc Fin Soup > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
-    3770,  -- Mutton Chop > Restores 552 health over 24 sec.  Must remain seated while eating.
     12214,  -- Mystery Stew > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
-    34780,  -- Naaru Ration > Restores 7500 health and 7200 mana over 30 sec.  Must remain seated while eating.
-    13931,  -- Nightfin Soup > Restores 874.8 health over 27 sec.   Must remain seated while eating.   Also restores 8 Mana every 5 seconds for 10 min.
     33035,  -- Ogre Mead > Restores 7200 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 20 Stamina and Spirit for 30 min. Standard alcohol.
-    32685,  -- Ogri'la Chicken Fingers > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    6458,  -- Oil Covered Fish > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     30358,  -- Oronok's Tuber of Agility > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Agility and Spirit for 30 min.
     30357,  -- Oronok's Tuber of Healing > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and increase healing done by 44 and Spirit by 20 for 30 min.
     30361,  -- Oronok's Tuber of Spell Power > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 23 Spell Damage and 20 Spirit for 30 min.
     30359,  -- Oronok's Tuber of Strength > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Strength and Spirit for 30 min.
     34019,  -- Path of Brew > Restores 835 mana over 24 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 6 Stamina and Spirit for 15 min. Standard alcohol.
-    38427,  -- Pickled Egg > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    19305,  -- Pickled Kodo Foot > Restores 552 health over 24 sec.  Must remain seated while eating.
     33024,  -- Pickled Sausage > Restores 2148 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 14 Stamina and Spirit for 15 min.
     27665,  -- Poached Bluefish > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 23 Spell Damage and 20 Spirit for 30 min.
-    13932,  -- Poached Sunscale Salmon > Restores 874.8 health over 27 sec.   Must remain seated while eating.   Also restores 6 health every 5 seconds for 10 min.
-    21033,  -- Radish Kimchi > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    5095,  -- Rainbow Fin Albacore > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     27655,  -- Ravager Dog > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 40 attack power and 20 Spirit for 30 min.
     28501,  -- Ravager Egg Omelet > Restores 4320 health over 30 sec.   Must remain seated while eating.   Also increases your Stamina by 10 for 10 min.
-    4608,  -- Raw Black Truffle > Restores 1392 health over 30 sec.  Must remain seated while eating.
-    19224,  -- Red Hot Wings > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    4605,  -- Red-speckled Mushroom > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     1082,  -- Redridge Goulash > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
     23172,  -- Refreshing Red Apple > Restores 4% of your health and mana per second for 25 sec.  Must remain seated while eating.
-    5057,  -- Ripe Watermelon > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     12210,  -- Roast Raptor > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
-    2681,  -- Roasted Boar Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     27658,  -- Roasted Clefthoof > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Strength and Spirit for 30 min.
     5474,  -- Roasted Kodo Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     24105,  -- Roasted Moongraze Tenderloin > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
-    8952,  -- Roasted Quail > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    38428,  -- Rock-Salted Pretzel > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    4594,  -- Rockscale Cod > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    18255,  -- Runn Tum Tuber > Restores 1392 health over 30 sec.  Must remain seated while eating.
     18254,  -- Runn Tum Tuber Surprise > Restores 1933.2 health over 27 sec.   Must remain seated while eating.   Also increases your Intellect by 10 for 10 min.
     21217,  -- Sagefish Delight > Restores 840.0 health and 1260 mana over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Mana every 5 seconds for 15 min.
-    24072,  -- Sand Pear Pie > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    1326,  -- Sauteed Sunfish > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     33023,  -- Savory Sausage > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
     1017,  -- Seasoned Wolf Kabob > Restores 552 health over 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 6 Stamina and Spirit for 15 min.
-    3448,  -- Senggin Root > Restores 294 health and 294 mana over 21 sec. Must remain seated while eating.
-    16171,  -- Shinsollo > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    4536,  -- Shiny Red Apple > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    6299,  -- Sickly Looking Fish > Restores 30 health over 15 sec.  Must remain seated while eating.
-    27856,  -- Skethyl Berries > Restores 4320 health over 30 sec.  Must remain seated while eating.
     33825,  -- Skullfish Soup > Restores 7200 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become enlightened and gain 20 Spell Critical Strike Rating and Spirit for 30 min.
     32721,  -- Skyguard Rations > Restores 6000 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 15 Stamina and 15 Spirit for 15 min.
-    787,  -- Slitherskin Mackerel > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    4656,  -- Small Pumpkin > Restores 61.2 health over 18 sec.  Must remain seated while eating.
     34017,  -- Small Step Brew > Restores 151 mana over 18 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 2 Stamina and Spirit for 15 min. Standard alcohol.
-    6890,  -- Smoked Bear Meat > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    30610,  -- Smoked Black Bear Meat > Restores 4320 health over 30 sec.  Must remain seated while eating.
     20452,  -- Smoked Desert Dumplings > Restores 2148 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Strength for 15 min.
     21072,  -- Smoked Sagefish > Restores 378.0 health and 567 mana over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 3 Mana every 5 seconds for 15 min.
-    27854,  -- Smoked Talbuk Venison > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    4538,  -- Snapvine Watermelon > Restores 552 health over 24 sec.  Must remain seated while eating.
-    4601,  -- Soft Banana Bread > Restores 1392 health over 30 sec.  Must remain seated while eating.
     3729,  -- Soothing Turtle Bisque > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
     34412,  -- Sparkling Apple Cider > Restores 1992 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become well fed and gain 12 Stamina and Spirit for 15 min.
-    11109,  -- Special Chicken Feed > Restores 30 health over 15 sec.  Must remain seated while eating.
-    30816,  -- Spice Bread > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    19304,  -- Spiced Beef Jerky > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     12216,  -- Spiced Chili Crab > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
     34065,  -- Spiced Onion Cheese > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
     2680,  -- Spiced Wolf Meat > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     12211,  -- Spiced Wolf Ribs > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
-    17408,  -- Spicy Beefstick > Restores 1392 health over 30 sec.  Must remain seated while eating.
     27667,  -- Spicy Crawdad > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 30 Stamina and 20 Spirit for 30 min.
     33872,  -- Spicy Hot Talbuk > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Hit Rating and Spirit for 30 min.
     33025,  -- Spicy Smoked Sausage > Restores 4320 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
     17222,  -- Spider Sausage > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
-    8957,  -- Spinefin Halibut > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    4606,  -- Spongy Morel > Restores 552 health over 24 sec.  Must remain seated while eating.
-    29453,  -- Sporeggar Mushroom > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    6887,  -- Spotted Yellowtail > Restores 1392 health over 30 sec.  Must remain seated while eating.
-    23495,  -- Springpaw Appetizer > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    16170,  -- Steamed Mandu > Restores 552 health over 24 sec.  Must remain seated while eating.
-    33048,  -- Stewed Trout > Restores 7500 health over 30 sec.  Must remain seated while eating.
-    1707,  -- Stormwind Brie > Restores 874.8 health over 27 sec.  Must remain seated while eating.
     34022,  -- Stout Shrunken Head > Restores 2934 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 14 Stamina and Spirit for 15 min. Standard alcohol.
     5477,  -- Strider Stew > Restores 243.6 health over 21 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 4 Stamina and Spirit for 15 min.
-    21552,  -- Striped Yellowtail > Restores 1392 health over 30 sec.  Must remain seated while eating.
-    30458,  -- Stromgarde Muenster > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    18633,  -- Styleen's Sour Suckerpop > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    2685,  -- Succulent Pork Ribs > Restores 552 health over 24 sec.  Must remain seated while eating.
     34064,  -- Succulent Sausage > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
-    27858,  -- Sunspring Carp > Restores 4320 health over 30 sec.  Must remain seated while eating.
     27660,  -- Talbuk Steak > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
     3728,  -- Tasty Lion Steak > Restores 874.8 health over 27 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 8 Stamina and Spirit for 15 min.
-    4537,  -- Tel'Abim Banana > Restores 243.6 health over 21 sec.  Must remain seated while eating.
-    29450,  -- Telaari Grapes > Restores 7500 health over 30 sec.  Must remain seated while eating.
     18045,  -- Tender Wolf Steak > Restores 1392 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 12 Stamina and Spirit for 15 min.
     33043,  -- The Essential Brewfest Pretzel > Restores 61.2 health over 18 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 2 Stamina and Spirit for 15 min.
     33026,  -- The Golden Link > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Stamina and Spirit for 30 min.
     33031,  -- Thunder 45 > Restores 1345 mana over 27 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 8 Stamina and Spirit for 15 min. Standard alcohol.
     33032,  -- Thunderbrew Ale > Restores 1992 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 12 Stamina and Spirit for 15 min. Standard alcohol.
     33033,  -- Thunderbrew Stout > Restores 2934 mana over 30 sec.  Must remain seated while drinking.  If you spend at least 10 seconds drinking you will become "well fed" and gain 14 Stamina and Spirit for 15 min. Standard alcohol.
-    7228,  -- Tigule's Strawberry Ice Cream > Restores 552 health over 24 sec.  Must remain seated while eating.
-    4540,  -- Tough Hunk of Bread > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    117,  -- Tough Jerky > Restores 61.2 health over 18 sec.  Must remain seated while eating.
-    12763,  -- Un'Goro Etherfruit > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    16766,  -- Undermine Clam Chowder > Restores 1392 health over 30 sec.  Must remain seated while eating.
     28112,  -- Underspore Pod > Restores 4410 health and 4410 mana over 30 sec.  Must remain seated while eating.
-    8543,  -- Underwater Mushroom Cap > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    16167,  -- Versicolor Treat > Restores 243.6 health over 21 sec.  Must remain seated while eating.
     27659,  -- Warp Burger > Restores 7500 health over 30 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain 20 Agility and Spirit for 30 min.
-    19060,  -- Warsong Gulch Enriched Ration > Restores 2148 health and 4410 mana over 30 sec.  Must remain seated while eating.  Usable only inside Warsong Gulch.
-    19062,  -- Warsong Gulch Field Ration > Restores 1074 health and 2202 mana over 30 sec.  Must remain seated while eating.  Usable only inside Warsong Gulch.
-    19061,  -- Warsong Gulch Iron Ration > Restores 1608 health and 3306 mana over 30 sec.  Must remain seated while eating.  Usable only inside Warsong Gulch.
-    733,  -- Westfall Stew > Restores 552 health over 24 sec.  Must remain seated while eating.
-    3771,  -- Wild Hog Shank > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    16169,  -- Wild Ricecake > Restores 874.8 health over 27 sec.  Must remain seated while eating.
     11950,  -- Windblossom Berries > Restores 1933.2 health over 27 sec.   Must remain seated while eating.   Also increases your Stamina by 10 for 10 min.
-    22324,  -- Winter Kimchi > Restores 2148 health over 30 sec.  Must remain seated while eating.
-    13755,  -- Winter Squid > Restores 874.8 health over 27 sec.  Must remain seated while eating.
-    21240,  -- Winter Veil Candy > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
     21254,  -- Winter Veil Cookie > Restores 2% of your health per second for 24 sec.  Must remain seated while eating.  If you spend at least 10 seconds eating you will become well fed and gain Stamina and Spirit for 15 min.
-    21241,  -- Winter Veil Eggnog > Restores 2% of your mana per second for 30 sec.  Must remain seated while drinking.
-    21236,  -- Winter Veil Loaf > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
-    21235,  -- Winter Veil Roast > Restores 2% of your health per second for 25 sec.  Must remain seated while eating.
-    27859,  -- Zangar Caps > Restores 4320 health over 30 sec.  Must remain seated while eating.
-    29452,  -- Zangar Trout > Restores 7500 health over 30 sec.  Must remain seated while eating.
 }
 
 tbc_other_consumables = {
@@ -8182,7 +8248,6 @@ tbc_other_consumables = {
     1176,  -- Smelling Salts > Brings a dead player back to life with 70 health and 135 mana.  Cannot be cast when in combat.
     1177,  -- Oil of Olaf > Increases armor by 50 for 1 hour.  Guardian Elixir.
     1178,  -- Explosive Rocket > Inflicts 28 to 32 Fire damage in a 3 yard radius.
-    11846,  -- Wizbang's Special Brew > A typical alcoholic beverage.
     1187,  -- Spiked Collar > Summons a guardian felhunter that will protect you for 1 hour.
     1191,  -- Bag of Marbles > Decreases target's chance to hit by 25% for 10 sec.
     11914,  -- Empty Cursed Ooze Jar > Fills an Empty Cursed Ooze Jar with a sample of Cursed Ooze. WARNING! Will likely destroy the creature's body.
@@ -8190,7 +8255,6 @@ tbc_other_consumables = {
     11951,  -- Whipper Root Tuber > Restores 700 to 900 health.
     11952,  -- Night Dragon's Breath > Restores 394 to 456 mana and 394 to 456 health.
     11953,  -- Empty Pure Sample Jar > Fills an Empty Pure Sample Jar with a sample of pure ooze. WARNING! Will likely destroy the creature's body.
-    12003,  -- Dark Dwarven Lager > An extremely potent alcoholic beverage.
     12190,  -- Dreamless Sleep Potion > Puts the imbiber in a dreamless sleep for 12 sec.  During that time the imbiber heals 1200 health and 1200 mana.
     12217,  -- Dragonbreath Chili > Occasionally belch flame at enemies struck in melee for the next 10 min. (Proc chance: 5%, 10s cooldown)
     12586,  -- Immature Venom Sac > Cures 1 poison effect.
@@ -8236,16 +8300,11 @@ tbc_other_consumables = {
     16895,  -- Greater Soulstone > Stores the friendly target's soul.  If the target dies while his soul is stored, he will be able to resurrect with 1600 health and 2200 mana.
     16896,  -- Major Soulstone > Stores the friendly target's soul.  If the target dies while his soul is stored, he will be able to resurrect with 2200 health and 2800 mana.
     17048,  -- Rumsey Rum > Increases Stamina by 10 for 15 min and gets you drunk to boot!
-    17196,  -- Holiday Spirits > A fairly weak alcoholic beverage.
-    17402,  -- Greatfather's Winter Ale > A strong alcoholic beverage.
-    17403,  -- Steamwheedle Fizzy Spirits > A typical alcoholic beverage.
     17708,  -- Elixir of Frost Power > Increases spell frost damage by up to 15 for 30 min.  Battle Elixir.
     17747,  -- Razorlash Root > Restores 600 health and mana over 10 sec.
     18209,  -- Energized Sparkplug > Decreases target's chance to hit by 25% for 10 sec.
     18269,  -- Gordok Green Grog > Increases Stamina by 10 for 15 min and gets you drunk to boot.  Green means it's good!
     18284,  -- Kreeg's Stout Beatdown > Increases Spirit by 25, but decreases Intelligence by 5 for 15 min.  Smoooooth.
-    18287,  -- Evermurky > A typical alcoholic beverage.
-    18288,  -- Molasses Firewater > A strong alcoholic beverage.
     18294,  -- Elixir of Greater Water Breathing > Allows the Imbiber to breathe water for 1 hour.
     18297,  -- Thornling Seed > Plants a Thornling which attracts nearby enemies.
     184937,  -- Chronoboon Displacer > Alters the fabric of time, suspending beneficial world effects from dragonslaying, Dire Maul, Zul'Gurub, and Felwood.
@@ -8264,8 +8323,6 @@ tbc_other_consumables = {
     19045,  -- Stormpike Battle Standard > Place a Battle Standard with 1500 health that increases the damage of all party members that stay within 45 yards of the Battle Standard by 10%.  Lasts 2 min. May only be used in Alterac Valley.
     19046,  -- Frostwolf Battle Standard > Place a Battle Standard with 1500 health that increases the maximum damage of all party members that stay within 45 yards of the Battle Standard by 10%.  Lasts 2 min. May only be used in Alterac Valley.
     19183,  -- Hourglass Sand > Cures the user of Brood Affliction: Bronze.
-    19221,  -- Darkmoon Special Reserve > An extremely potent alcoholic beverage.
-    19222,  -- Cheap Beer > A fairly weak alcoholic beverage.
     19440,  -- Powerful Anti-Venom > Target is cured of poisons up to level 60.
     1970,  -- Restoring Balm > Heals the target for 180 damage over 12 sec.
     20002,  -- Greater Dreamless Sleep Potion > Puts the imbiber in a dreamless sleep for 12 sec.  During that time the imbiber heals 2100 health and 2100 mana.
@@ -8360,11 +8417,7 @@ tbc_other_consumables = {
     23417,  -- Sanctified Crystal > Unleash the crystal's magic to encapsulate the essence of an Uncontrolled Voidwalker near death.
     23435,  -- Elderberry Pie > Increases defense rating by 20 for 1 hour.
     23444,  -- Goldenmist Special Brew > Increases the player's maximum health by 70 for 1 hour.
-    23492,  -- Suntouched Special Reserve > A fairly weak alcoholic beverage.
-    23584,  -- Loch Modan Lager > An extremely potent alcoholic beverage.
-    23586,  -- Aerie Peak Pale Ale > A strong alcoholic beverage.
     23645,  -- Seer's Relic > Bestows seer's vision upon the wielder.
-    23704,  -- Eversong Port > A strong alcoholic beverage.
     23715,  -- Permanent Lung Juice Cocktail > Increases Stamina by 25 when consumed.
     23718,  -- Permanent Ground Scorpok Assay > Increases Agility by 25 when consumed.
     23719,  -- Permanent Cerebral Cortex Compound > Increases Intellect by 25 when consumed.
@@ -8377,7 +8430,6 @@ tbc_other_consumables = {
     23794,  -- Permanent Sheen of Zanza > Increases the chance that the player will reflect hostile spells cast on them by 3% for 2 hrs. Will automatically reflect the first offensive spell cast against the user. Only one type of Zanza potion may be active at any given time.
     23795,  -- Permanent Spirit of Zanza > Increases the player's Spirit by 50 and Stamina by 50 for 2 hrs.  You can only have the effect of one Zanza potion at a time.
     23796,  -- Permanent Swiftness of Zanza > Increases the player's run speed by 20% for 2 hrs.  You can only have the effect of one Zanza potion at a time.
-    23848,  -- Nethergarde Bitter > An extremely potent alcoholic beverage.
     23857,  -- Legacy of the Mountain King > Break the seal of the book, granting you a chance to increase your armor and resistance to magic when struck in combat. (Proc chance: 3%)
     23862,  -- Redemption of the Fallen > Break the seal on the book, granting your healing spells the chance to summon a ghostly ally. (Proc chance: 3%)
     23864,  -- Torment of the Worgen > Break the seal on the book, granting you a chance to deal additional shadow damage on ranged or melee attacks.
@@ -8416,13 +8468,7 @@ tbc_other_consumables = {
     25883,  -- Dense Stone Statue > Place a dense stone statue on the ground where it will heal you for a short time before its power fades.
     25884,  -- Primal Stone Statue > Place a primal stone statue on the ground where it will heal you for a short time before its power fades.
     25886,  -- Purple Smoke Flare > Throw a purple smoke flare at a specific location that lasts for 5 min.
-    2593,  -- Flask of Stormwind Tawny > A typical alcoholic beverage.
-    2594,  -- Flagon of Dwarven Honeymead > A strong alcoholic beverage.
-    2595,  -- Jug of Badlands Bourbon > A strong alcoholic beverage.
-    2596,  -- Skin of Dwarven Stout > A typical alcoholic beverage.
     2633,  -- Jungle Remedy > Cures diseases and neutralizes poisons.
-    2686,  -- Thunder Ale > A fairly weak alcoholic beverage.
-    2723,  -- Bottle of Dalaran Noir > A fairly weak alcoholic beverage.
     27317,  -- Elemental Sapta > Allows the imbiber to see elemental spirits.
     27388,  -- Mr. Pinchy > Speak with Mr. Pinchy and be granted a Wish!   Maybe something good...maybe something bad....Mr. Pinchy does not know!
     27553,  -- Crimson Steer Energy Drink > Instantly restores [100 - 2 * max(0, Level - 40)] energy.
@@ -8434,10 +8480,7 @@ tbc_other_consumables = {
     28110,  -- Fat Gnome and Little Elf > Drops a super-powered bomb on top of Burning Legion transporters.
     28131,  -- Reaver Buster Launcher > Launches a missile at a large, heated target.
     28132,  -- Area 52 Special > Drops a heavy bomb.
-    28284,  -- Don Carlos Tequila > A strong alcoholic beverage.
     28607,  -- Sunfury Disguise > Magically disguises wearer as a member of the Sunfury army.
-    2894,  -- Rhapsody Malt > A fairly weak alcoholic beverage.
-    29112,  -- Cenarion Spirits > A strong alcoholic beverage.
     29324,  -- Warp-Attuned Orb > Measures errant energy levels near large mana currents.
     29443,  -- Bloodmaul Brutebane Brew > Places a mug on the ground which attracts a nearby Bladespire ogre.
     29482,  -- Ethereum Essence > It might open your mind and allow you to see things as the ethereals do. It may also give you irreversible brain damage.
@@ -8449,13 +8492,10 @@ tbc_other_consumables = {
     29585,  -- Legion Whip > Consumes the Legion Whip to banish a Terrorfiend for 1 minute.
     29778,  -- Phase Disruptor > Drops a phase disruptor that homes in on the void conduit atop Manaforge Ultris.
     29796,  -- Socrethar's Teleportation Stone > Creates a portal, teleporting group members that use it to Socrethar's Seat and back.
-    30309,  -- Stonebreaker Brew > A strong alcoholic beverage.
-    30499,  -- Brightsong Wine > A strong alcoholic beverage.
     30540,  -- Tally's Waiver (Unsigned) > Click to waive Tally Zapnabber's liability.
     30615,  -- Halaani Whiskey > Increases Stamina by 20 for 15 min and increases the drinker's desire to converse.
     30690,  -- Power Converter > Destroys technological terror constructs.
     30793,  -- Skettis See Invis Potion > Allows the imbiber to see the shadowy spirits of Skettis.
-    30858,  -- Peon Sleep Potion > A strong alcoholic beverage.
     31121,  -- Costume Scraps > Combine 5 Costume Scraps into an Overseer Disguise.
     31122,  -- Overseer Disguise > Transforms you into the likeness of Overseer Nuaar for 3 min.  It can only be used within the Blackwing Coven area of the Blade's Edge Mountains.  Maxnar the Ashmaw, and his Wyrmcult Blessed, can see through the disguise.  Looting, taking a hostile action, or casting beneficial spells will drop the disguise.
     31337,  -- Orb of the Blackwhelp > Transforms you into a helpless Blackwhelp for 15 min.   You cannot attack or cast spells while transformed.
@@ -8487,7 +8527,6 @@ tbc_other_consumables = {
     32600,  -- Unstable Flask of the Physician > Increases Intellect by 20, Stamina by 30, and healing by up to 44 for 2 hrs.  You can only have the effect of one flask at a time.  This effect persists through death, but only works in the Blade's Edge Mountains Plateaus and Gruul's Lair.
     32601,  -- Unstable Flask of the Sorcerer > Increases Intellect by 20, Stamina by 30, and spell damage and healing by up to 23 for 2 hrs.  You can only have the effect of one flask at a time.  This effect persists through death, but only works in the Blade's Edge Mountains Plateaus and Gruul's Lair.
     32602,  -- Crystalforged Darkrune > Activate near a forge camp warp-gate to possess the nearby felguard degrader.
-    32667,  -- Bash Ale > A strong alcoholic beverage.
     32764,  -- Flaskataur's Celestial Brew > Increases maximum health by 500 and defense rating by 10 for 2 hrs. Counts as both a Battle and Guardian elixir.  This effect persists through death.
     32765,  -- Flaskataur's Tears > Increases attack power by 120 for 2 hrs. Counts as both a Battle and Guardian elixir.  This effect persists through death.
     32766,  -- Flaskataur's Flask of Flaskocity > Increases mana regeneration by 25 mana per 5 seconds for 2 hrs. Counts as both a Battle and Guardian elixir.  This effect persists through death.
@@ -8529,7 +8568,6 @@ tbc_other_consumables = {
     3391,  -- Elixir of Ogre's Strength > Increases Strength by 8 for 1 hour.  Battle Elixir.
     33924,  -- Delicious Chocolate Cake > If you spend at least 5 seconds eating you will become Very Happy for 1 hour.
     33927,  -- Brewfest Pony Keg > Right Click to tap a pony keg of delicious Brewfest Brew.Brewfest Brew disappears if logged out for more than 15 minutes.
-    33929,  -- Brewfest Brew > A strong alcoholic beverage.
     33930,  -- Amani Charm of the Bloodletter > Your melee attacks have a 2% chance to grant you 1000 armor penetration for your next attack and to reduce your threat against your current target. (Proc chance: 2%)
     33931,  -- Amani Charm of Mighty Mojo > Your spell attacks have a 2% chance to make your next spell free and to reduce your threat against your current target. (Proc chance: 2%)
     33932,  -- Amani Charm of the Witch Doctor > Your healing spells have a 2% chance to place a healing effect on your target, healing 10% of the target's base health every 3 sec. for 9 sec. (Proc chance: 2%)
@@ -8554,17 +8592,7 @@ tbc_other_consumables = {
     35717,  -- Shattrath Flask of Blinding Light > Increases spell damage caused by Arcane, Holy and Nature spells by up to 80 for 2 hrs.  Counts as both a Battle and Guardian elixir.  This effect persists through death.Only active in Tempest Keep, Serpentshrine Cavern, Caverns of Time: Mount Hyjal, Black Temple and the Sunwell Plateau.
     35720,  -- Lord of Frost's Private Label > The coolest drink around.
     36748,  -- Dark Brewmaiden's Brew > Drink this before the Brewmaiden throws you another.
-    3703,  -- Southshore Stout > A typical alcoholic beverage.
-    37488,  -- Wild Winter Pilsner > A weak alcohol that may bring out the beast in you.
-    37489,  -- Izzard's Ever Flavor > A weak alcohol that has a lot of head.
-    37490,  -- Aromatic Honey Brew > Weak alcohol with some big taste!
-    37491,  -- Metok's Bubble Bock > Weak alcohol with a light and refreshing taste.
-    37492,  -- Springtime Stout > A weak alcohol that will put some Spring in your step.
     37493,  -- Blackrock Lager > This brew is hot!
-    37494,  -- Stranglethorn Brew > A weak alcohol from the deepest reaches of the jungle.
-    37495,  -- Draenic Pale Ale > Weak, but smooth, alcohol.
-    37496,  -- Binary Brew > A weak alcohol, but a technological triumph in brewing technology.
-    37497,  -- Autumnal Acorn Ale > A weak alcohol that's good for you and good for nature.
     37498,  -- Bartlett's Bitter Brew > Full body goodness!
     37499,  -- Lord of Frost's Private Label > The coolest drink around.
     37582,  -- Pyroblast Cinnamon Ball > Increases damage done from spells by up to 6 for 30 min.
@@ -8574,16 +8602,7 @@ tbc_other_consumables = {
     37604,  -- Tooth Pick > Right click to clean your teeth with the Tooth Pick, giving yourself a Sparkling Smile.
     37750,  -- Fresh Brewfest Hops > Transforms your mount into something more festive.
     37863,  -- Direbrew's Remote > Give your party a ride to the Grim Guzzler.
-    37898,  -- Wild Winter Pilsner > A weak alcohol that may bring out the beast in you.
-    37899,  -- Izzard's Ever Flavor > A weak alcohol that has a lot of head.
-    37900,  -- Aromatic Honey Brew > Weak alcohol with some big taste!
-    37901,  -- Metok's Bubble Bock > Weak alcohol with a light and refreshing taste.
-    37902,  -- Springtime Stout > A weak alcohol that will put some Spring in your step.
     37903,  -- Blackrock Lager > This brew is hot!
-    37904,  -- Stranglethorn Brew > A weak alcohol from the deepest reaches of the jungle.
-    37905,  -- Draenic Pale Ale > Weak, but smooth, alcohol.
-    37906,  -- Binary Brew > A weak alcohol, but a technological triumph in brewing technology.
-    37907,  -- Autumnal Acorn Ale > A weak alcohol that's good for you and good for nature.
     37908,  -- Bartlett's Bitter Brew > Full body goodness!
     37909,  -- Lord of Frost's Private Label > The coolest drink around.
     3823,  -- Lesser Invisibility Potion > Gives the imbiber lesser invisibility for 15 sec.
@@ -8596,8 +8615,6 @@ tbc_other_consumables = {
     38300,  -- Diluted Ethereum Essence > Allows you to detect lesser invisibility for 30 sec without causing brain damage... probably.Conjured items disappear if logged out for more than 15 minutes.
     38308,  -- Ethereal Essence Sphere > Toss the sphere to a friendly player. If they have free room in their pack they will catch it.Conjured items disappear if logged out for more than 15 minutes.
     38320,  -- Dire Brew > An enchanted alcoholic beverage that may have an effect on your appearance...
-    38432,  -- Plugger's Blackrock Ale > A strong alcoholic beverage.
-    38466,  -- Sulfuron Slammer > An extremely potent flaming alcoholic beverage.
     38518,  -- Cro's Apple > Crush the apple!
     38577,  -- Party G.R.E.N.A.D.E. > Right Click to throw and start the party.
     38626,  -- Empty Brew Bottle > Throw me!
@@ -8607,9 +8624,7 @@ tbc_other_consumables = {
     4480,  -- Thundering Charm > Banishes a Cresting Exile
     4481,  -- Cresting Charm > Banishes a Burning Exile
     4546,  -- Call of the Raptor > Increases your Agility by 12 for 30 min.
-    4595,  -- Junglevine Wine > A strong alcoholic beverage.
     4598,  -- Goblin Fishing Pole > Inflicts 128 to 172 Fire damage in a 5 yard radius.
-    4600,  -- Cherry Grog > A strong alcoholic beverage.
     4623,  -- Lesser Stoneshield Potion > Increases armor by 1000 for 1.50 min.
     4941,  -- Really Sticky Glue > Renders a target unable to move for 10 sec.
     4945,  -- Faintly Glowing Skull > Steals 75 to 125 life from target enemy.
@@ -8687,7 +8702,6 @@ tbc_other_consumables = {
     9206,  -- Elixir of Giants > Increases your Strength by 25 for 1 hour.  Battle Elixir.
     9224,  -- Elixir of Demonslaying > Increases attack power by 265 against demons.  Lasts 5 min.    Battle Elixir.
     9233,  -- Elixir of Detect Demon > Shows the location of all nearby demons on the minimap for 1 hour.
-    9260,  -- Volatile Rum > A strong alcoholic beverage.
     9264,  -- Elixir of Shadow Power > Increases spell shadow damage by up to 40 for 30 min.  Battle Elixir.
     9312,  -- Blue Firework > Shoots a firework into the air that bursts into a thousand blue stars.
     9313,  -- Green Firework > Shoots a firework into the air that bursts into a thousand green stars.
@@ -8696,9 +8710,6 @@ tbc_other_consumables = {
     9317,  -- Red, White and Blue Firework > Shoots a firework into the air that bursts into red, white and blue stars.
     9318,  -- Red Firework > Shoots a firework into the air that bursts into a thousand red stars.
     9319,  -- Nimboya's Laden Pike > Place at a Witherbark village.
-    9360,  -- Cuergo's Gold > A strong alcoholic beverage.
-    9361,  -- Cuergo's Gold with Worm > An extremely potent alcoholic beverage.
-
-    20520,  -- Dark Rune 
-    12662,  -- Demonic Rune 
+    20520,  -- Dark Rune > Restores 900 to 1500 mana at the cost of 600 to 1000 life.
+    12662,  -- Demonic Rune  > Restores 900 to 1500 mana at the cost of 600 to 1000 life.
 }

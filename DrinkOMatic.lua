@@ -296,7 +296,11 @@ local specific_mana_potions
 local mana_gems
 local healthstones
 local scrolls
+local nb_foods
+local conjured_nb_foods
+local percent_foods
 local foods
+local alcohol
 local other_consumables
 local buff_map
 
@@ -311,7 +315,11 @@ local function get_tables()
         specific_mana_potions = tbc_specific_mana_potions
         healthstones = tbc_healthstones
         scrolls = tbc_scrolls
+        nb_foods = tbc_nonbuff_foods
+        conjured_nb_foods = tbc_conjured_nonbuff_foods
+        percent_foods = tbc_percent_nonbuff_foods
         foods = tbc_foods
+        alcohol = tbc_alcohol
         other_consumables = tbc_other_consumables
     end
 end
@@ -354,6 +362,10 @@ local function makeCategoriesTable()
     addOrderedCategory(specific_healing_potions, "SpecificHealingPotion")
     addOrderedCategory(specific_mana_potions, "SpecificManaPotion")
     addOrderedCategory(healthstones, "HealthStone")
+    addOrderedCategory(nb_foods, "NonbuffFood")
+    addOrderedCategory(conjured_nb_foods, "ConjuredNonbuffFood")
+    addOrderedCategory(percent_foods, "PercentFood")
+    addOrderedCategory(alcohol, "Alcohol")
     addUnorderedCategory(scrolls, "Scroll")
     addUnorderedCategory(foods, "Food")
     addUnorderedCategory(other_consumables, "Other")
@@ -381,23 +393,9 @@ function DOM_IsSpecialBag(bagNum)
     return bagType ~= 0
 end
 
-local bestConsumables = { 
-        healingPotion = {}, 
-        manaPotion = {},
-        specificHealing = {},
-        specificMana = {}, 
-        healthStone = {}, 
-        drink = {},
-        conjuredDrink = {},
-        manaGem = {},
-        scrolls = {},
-        foods = {},
-        other = {},
-    }
+local bestConsumables = {} 
 
--- Find the best healing potion in your bags
-local function GetBestConsumables()
-    -- print("Finding consumables...")
+local function resetBestConsumables()
     bestConsumables = { 
         healingPotion = {}, 
         manaPotion = {},
@@ -409,8 +407,20 @@ local function GetBestConsumables()
         manaGem = {},
         scrolls = {},
         foods = {},
+        nb_foods = {},
+        conjured_nb_foods = {},
+        percent_foods = {},
+        alcohol = {},
         other = {},
     }
+end
+
+
+-- Find the best healing potion in your bags
+local function GetBestConsumables()
+    -- print("Finding consumables...")
+    resetBestConsumables()
+
     for bag = 0, 4 do
         for slot = 1, C_Container.GetContainerNumSlots(bag) do
             local itemID = C_Container.GetContainerItemID(bag, slot)
@@ -442,6 +452,14 @@ local function GetBestConsumables()
                         bestConsumables.healthStone[itemName] = rank
                     elseif category == "ManaGem" then
                         bestConsumables.manaGem[itemName] = rank
+                    elseif category == "NonbuffFood" then
+                        bestConsumables.nb_foods[itemName] = rank
+                    elseif category == "ConjuredNonbuffFood" then
+                        bestConsumables.conjured_nb_foods[itemName] = rank
+                    elseif category == "PercentFood" then
+                        bestConsumables.percent_foods[itemName] = rank
+                    elseif category == "Alcohol" then
+                        bestConsumables.alcohol[itemName] = rank
                     elseif category == "Scroll" then
                         table.insert(bestConsumables.scrolls, itemName)
                     elseif category == "Food" then
@@ -1330,7 +1348,7 @@ end
 local lastPickConsumablesTime = 0
 local lastBagUpdate = 0
 local bagUpdateCooldown = 0.1
-local cooldownPeriod = 2 -- seconds
+local cooldownPeriod = 0.1 -- seconds
 
 local function amIaDruid()
     if IsClassicWow() then
@@ -1381,6 +1399,10 @@ local function sortConsumables()
     local sorted_specific_mana_potions = _sortTable(bestConsumables.specificMana)
     local sorted_healthstones = _sortTable(bestConsumables.healthStone)
     local sorted_mana_gems = _sortTable(bestConsumables.manaGem)
+    local sorted_nb_foods = _sortTable(bestConsumables.nb_foods)
+    local sorted_conjured_nb_foods = _sortTable(bestConsumables.conjured_nb_foods)
+    local sorted_percent_foods = _sortTable(bestConsumables.percent_foods)
+    local sorted_alcohol = _sortTable(bestConsumables.alcohol)
 
     if DEBUG then
         for _, itemName in ipairs(sorted_drinks) do
@@ -1391,7 +1413,7 @@ local function sortConsumables()
         end
     end
 
-    return sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems
+    return sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol
 end
 
 
@@ -1405,7 +1427,7 @@ function DOM:createButtons()
     DOM.buffToButton = {}
     
     -- Rest of button creation logic
-    local sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems = sortConsumables()
+    local sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol = sortConsumables()
     
     if sorted_drinks or sorted_conjured_drinks then
             createDrinkButton(1, false, sorted_drinks, "DrinkOMaticDrinkButton", sorted_conjured_drinks)
@@ -1413,6 +1435,18 @@ function DOM:createButtons()
 
     if sorted_healing_potions or sorted_specific_healing_potions then
         createDrinkButton(2, DOM_DRUID, sorted_healing_potions, "DrinkOMaticHealingPotionButton", sorted_specific_healing_potions)
+    end
+
+    if sorted_nb_foods or sorted_conjured_nb_foods then
+        createDrinkButton(1, false, sorted_nb_foods, "DrinkOMaticEatButton", sorted_conjured_nb_foods)
+    end
+
+    if sorted_percent_foods then
+        createDrinkButton(1, false, sorted_percent_foods, "DrinkOMaticPEatButton")
+    end
+
+    if sorted_alcohol then
+        createDrinkButton(1, false, sorted_alcohol, "DrinkOMaticDrunkButton")
     end
 
     if sorted_mana_potions or sorted_specific_mana_potions then
@@ -1625,12 +1659,7 @@ local function ThrottledPickConsumables()
     if InCombatLockdown() then return end
     
     bestConsumables = GetBestConsumables()
-    if bestConsumables.conjuredDrink then
-        -- print("Best conjured: " .. bestConsumables.conjuredDrink.name)
-    end
-    if bestConsumables.drink and bestConsumables.drink.name then
-        -- print("Best drink: " .. bestConsumables.drink.name)
-    end
+
     lastPickConsumablesTime = currentTime
 
     DOM:createButtons()
@@ -1811,6 +1840,10 @@ function DOM_OnEvent(self, event, arg1, arg2)
         DOM.updateNeeded = true
 
         ThrottledPickConsumables()
+
+        if not InCombatLockdown() then
+            DOM:createButtons()
+        end
 
     elseif (event == "PLAYER_REGEN_ENABLED") then
         if DOM.updateNeeded then
