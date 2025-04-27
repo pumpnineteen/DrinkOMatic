@@ -37,7 +37,7 @@ local dataObject = LDB:NewDataObject("Drink-o-Matic", {
     end,
 })
 
-
+local MediaBase = "Interface\\AddOns\\" .. addonName .. "\\media\\"
 
 -- Expansion determination code from LibBagUtils.lua
 local WOW_PROJECT_ID = _G.WOW_PROJECT_ID
@@ -286,6 +286,7 @@ DOM_CAT = "CAT"
 DOM_MOONKIN = "MOONKIN"
 DOM_ReturnToForm = DOM_BEAR
 DOM_DRUID = false
+DOM_NOFORM = "NOFORM"
 
 local drinks
 local conjured_drinks
@@ -517,6 +518,8 @@ local function getFormID()
         return catFormSpellID
     elseif DOM_ReturnToForm == DOM_MOONKIN then
         return moonkinSpellID
+    elseif DOM_ReturnToForm == DOM_NOFORM then
+        return DOM_NOFORM
     else
         print("Unknown form: ", DOM_ReturnToForm)
         return getBearID()
@@ -564,7 +567,7 @@ local function build_macrotext(itemNames, altItemNames, useDruid)
         end
     end
 
-    if useDruid then
+    if useDruid and DOM_ReturnToForm ~= DOM_NOFORM then
         macrotext = macrotext .. "/stopmacro [mod:alt]\n" .. "/cast " .. getFormName()
     end
 
@@ -819,11 +822,15 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
             button.form = form
         end
 
-        form:SetTexture(GetSpellTexture(getFormID()))
-        form:SetSize(12, 12)
-        form:SetPoint("TOPRIGHT")
-        form:Show()
-        button.form = form
+        if DOM_ReturnToForm == DOM_NOFORM then
+            form:Hide()
+        else
+            form:SetTexture(GetSpellTexture(getFormID()))
+            form:SetSize(12, 12)
+            form:SetPoint("TOPRIGHT")
+            form:Show()
+            button.form = form
+        end
     end
 
     -- Set up the tooltip
@@ -857,9 +864,9 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     local count = button.count
     local countFrame = button.countFrame or CreateFrame("Frame", nil, button)
     if not count then
-        countFrame:SetFrameLevel(1000)
+        countFrame:SetFrameLevel(10)
         count = countFrame:CreateFontString(nil, "OVERLAY", "NumberFontNormalSmall")
-        count:SetPoint("TOPLEFT", button, "TOPLEFT", 2, -2)
+        count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
         button.count = count
         button.countFrame = countFrame
     end
@@ -1491,6 +1498,7 @@ function DOM:createButtons()
         DOM.updateNeeded = false
     end  
     DOM.runningButtonCreation = false
+    DOM.buttonsInitialized = true
 end
 
 local function selectForm()
@@ -1535,7 +1543,13 @@ local function selectForm()
         
         button:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-            GameTooltip:SetSpellByID(spellID)
+            if spellID == DOM_NOFORM then
+                GameTooltip:ClearLines()  -- clear any existing text
+                GameTooltip:AddLine("No Form", 1, 1, 1)
+                GameTooltip:AddLine("Select this option to remain in your current form.", 0.8, 0.8, 0.8, true)
+            else
+                GameTooltip:SetSpellByID(spellID)
+            end
             GameTooltip:Show()
         end)
         button:SetScript("OnLeave", function(self)
@@ -1617,7 +1631,7 @@ local function selectForm()
             desaturateAll(self)
             DOM_ReturnToForm = DOM_BEAR
             -- print(DOM_ReturnToForm)
-            DOM:createButtons()
+            if DOM.buttonsInitialized then DOM:createButtons() end
         end)
     end
 
@@ -1630,7 +1644,7 @@ local function selectForm()
             desaturateAll(self)
             DOM_ReturnToForm = DOM_CAT
             -- print(DOM_ReturnToForm)
-            DOM:createButtons()
+            if DOM.buttonsInitialized then DOM:createButtons() end
         end)
     end
 
@@ -1643,9 +1657,24 @@ local function selectForm()
             desaturateAll(self)
             DOM_ReturnToForm = DOM_MOONKIN
             -- print(DOM_ReturnToForm)
-            DOM:createButtons()
+            if DOM.buttonsInitialized then DOM:createButtons() end
         end)
     end
+
+    -- Add the noform option
+    local noformTexture = MediaBase .. "noform"
+    -- DOM_NOFORM should be a defined constant (for example, 0 or any unique identifier).
+    local noformButton = createButton(noformTexture, DOM_NOFORM)
+    if noformButton then
+        noformButton:SetPoint("LEFT", (moonkinButton or catButton or bearButton or frame), "RIGHT", 0, 0)
+        noformButton:SetScript("OnClick", function(self)
+            if InCombatLockdown() then return end
+            desaturateAll(self)
+            DOM_ReturnToForm = DOM_NOFORM
+            if DOM.buttonsInitialized then DOM:createButtons() end
+        end)
+    end
+
 
     -- Initial desaturation setup
     local bearID = getBearID()
