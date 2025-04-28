@@ -505,6 +505,8 @@ local function getFormName()
         return GetSpellInfo(catFormSpellID)
     elseif DOM_ReturnToForm == DOM_MOONKIN then
         return GetSpellInfo(moonkinSpellID)
+    elseif DOM_ReturnToForm == DOM_NOFORM then
+        return DOM_NOFORM
     else
         print("Unknown form: ", DOM_ReturnToForm)
         return getBearName()
@@ -935,7 +937,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
             end
         end
         if event == "MODIFIER_STATE_CHANGED" then
-            if useDruid then 
+            if useDruid and DOM_ReturnToForm ~= DOM_NOFORM then 
                 if IsAltKeyDown() then
                     button.form:Hide()
                 else
