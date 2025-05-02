@@ -292,6 +292,7 @@ local drinks
 local conjured_drinks
 local healing_potions
 local mana_potions
+local bandages
 local specific_healing_potions
 local specific_mana_potions
 local mana_gems
@@ -312,6 +313,7 @@ local function get_tables()
         conjured_drinks = tbc_conjured_drinks
         healing_potions = tbc_healing_potions
         mana_potions = tbc_mana_potions
+        bandages = tbc_bandages
         specific_healing_potions = tbc_specific_healing_potions
         specific_mana_potions = tbc_specific_mana_potions
         healthstones = tbc_healthstones
@@ -359,6 +361,7 @@ local function makeCategoriesTable()
     addOrderedCategory(drinks, "Drink")
     addOrderedCategory(conjured_drinks, "ConjuredDrink")
     addOrderedCategory(healing_potions, "HealingPotion")
+    addOrderedCategory(bandages, "Bandage")
     addOrderedCategory(mana_potions, "ManaPotion")
     addOrderedCategory(specific_healing_potions, "SpecificHealingPotion")
     addOrderedCategory(specific_mana_potions, "SpecificManaPotion")
@@ -400,6 +403,7 @@ local function resetBestConsumables()
     bestConsumables = { 
         healingPotion = {}, 
         manaPotion = {},
+        bandage = {},
         specificHealing = {},
         specificMana = {}, 
         healthStone = {}, 
@@ -441,6 +445,8 @@ local function GetBestConsumables()
                         bestConsumables.conjuredDrink[itemName] = rank
                     elseif category == "Drink" then
                         bestConsumables.drink[itemName] = rank 
+                    elseif category == "Bandage" then
+                        bestConsumables.bandage[itemName] = rank
                     elseif category == "HealingPotion" then
                         bestConsumables.healingPotion[itemName] = rank
                     elseif category == "SpecificHealingPotion" then
@@ -1407,6 +1413,7 @@ end
 local function sortConsumables()
     local sorted_drinks = _sortTable(bestConsumables.drink)
     local sorted_conjured_drinks = _sortTable(bestConsumables.conjuredDrink)
+    local sorted_bandages = _sortTable(bestConsumables.bandage)
     local sorted_healing_potions = _sortTable(bestConsumables.healingPotion)
     local sorted_specific_healing_potions = _sortTable(bestConsumables.specificHealing)
     local sorted_mana_potions = _sortTable(bestConsumables.manaPotion)
@@ -1427,7 +1434,7 @@ local function sortConsumables()
         end
     end
 
-    return sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol
+    return sorted_drinks, sorted_conjured_drinks, sorted_bandages, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol
 end
 
 
@@ -1441,10 +1448,14 @@ function DOM:createButtons()
     DOM.buffToButton = {}
     
     -- Rest of button creation logic
-    local sorted_drinks, sorted_conjured_drinks, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol = sortConsumables()
+    local sorted_drinks, sorted_conjured_drinks, sorted_bandages, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol = sortConsumables()
     
     if sorted_drinks or sorted_conjured_drinks then
             createDrinkButton(1, false, sorted_drinks, "DrinkOMaticDrinkButton", sorted_conjured_drinks)
+    end
+
+    if sorted_bandages then
+        createDrinkButton(1, false, sorted_bandages, "DrinkOMaticBandageButton")
     end
 
     if sorted_healing_potions or sorted_specific_healing_potions then
