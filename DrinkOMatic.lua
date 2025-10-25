@@ -562,23 +562,90 @@ local function is_druid_button(tryDruid, itemID)
     return useDruid
 end
 
-local function build_macrotext(itemNames, altItemNames, useDruid)
-    local macrotext = ""
-    if altItemNames then
-        for _, item in ipairs(altItemNames) do
-            macrotext = macrotext .. "/use [nomod:ctrl] " .. item .. "\n"
+function DRNK()
+    for i=1,40 do 
+        local buff = UnitAura("player",i)
+        if not buff then
+            return false
+        end
+        if buff =="Drink" then
+            return 
+        else 
+            print(i, buff)
         end
     end
+    return false
+end
+
+function EAT()
+    for i=1,40 do 
+        local buff = UnitAura("player",i)
+        if not buff then
+            return false
+        end
+        if buff =="Food" then
+            return true
+        else 
+            print(i, buff)
+        end
+    end
+    return false
+end
+UnitBuff = UnitAura
+local function build_macrotext(itemNames, altItemNames, useDruid, isDrinkMacro, isFoodMacro)
+    local macrotext = ""
+    local conditional = ""
+    local buffName = ""
+    local alts = 0
+    if altItemNames then
+        for _, item in ipairs(altItemNames) do
+            alts = alts + 1
+            macrotext = macrotext .. "/use [nomod:ctrl] " .. item .. "\n"
+        end
+        if isDrinkMacro then
+            conditional = "[nobuff:Drink] "
+            buffName = "Drink"
+
+        elseif isFoodMacro then
+            conditional = "[nobuff:Food] "
+            buffName = "Food"
+        end
+    end
+    conditional = ""
+
+    if alts > 0 then
+        if isDrinkMacro then
+            macrotext = macrotext .. "/run if DRNK() then print(\"".. buffName .."\") end\n"
+        elseif isFoodMacro then
+            macrotext = macrotext .. "/run if EAT() then print(\"".. buffName .."\") end\n"
+        end
+        conditional = ""
+    end
+
     if itemNames then
         for _, item in ipairs(itemNames) do
-            macrotext = macrotext .. "/use " .. item .. "\n"
+            if isDrinkMacro then
+                local itemID = DOM:GetItemID(item)
+                local _conditional = ""
+                if itemID == 19301 and alts > 0 then
+                    _conditional = "[mod:ctrl] "
+                end 
+                macrotext = macrotext .. "/use ".. _conditional .. item .. "\n"
+            elseif isFoodMacro then
+                macrotext = macrotext .. "/use ".. item .. "\n"
+            else
+                macrotext = macrotext .. "/use ".. conditional .. item .. "\n"
+            end
         end
     end
 
     if useDruid and DOM_ReturnToForm ~= DOM_NOFORM then
         macrotext = macrotext .. "/stopmacro [mod:alt]\n" .. "/cast " .. getFormName()
     end
-
+    
+    if isDrinkMacro then
+        print("Final macrotext:\n", macrotext)
+    end
     return macrotext
 end
 
@@ -698,7 +765,7 @@ function DOM:GetItemID(itemName)
     return itemID
 end
 
-local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames)
+local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames, isDrinkType, isFoodType)
     if DOM.creatingButton[buttonName] then return end
     DOM.creatingButton[buttonName] = true
     local itemName = (itemNames and itemNames[1]) or nil    -- Use the first item from itemNames
@@ -712,7 +779,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     local useDruid = is_druid_button(tryDruid, itemID)
 
-    local macrotext = build_macrotext(itemNames, altItemNames, useDruid)
+    local macrotext = build_macrotext(itemNames, altItemNames, useDruid, isDrinkType, isFoodType)
 
     if DEBUG_SHOWMACROTEXT then
         debug_macrotext(buttonName, itemName, itemNames, macrotext)
@@ -1437,6 +1504,10 @@ local function sortConsumables()
     return sorted_drinks, sorted_conjured_drinks, sorted_bandages, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol
 end
 
+local IS_DRINK_TYPE = true
+local NOT_DRINK_TYPE = false
+local IS_FOOD_TYPE = true
+local NOT_FOOD_TYPE = false
 
 function DOM:createButtons()
     if InCombatLockdown() then return end
@@ -1451,7 +1522,7 @@ function DOM:createButtons()
     local sorted_drinks, sorted_conjured_drinks, sorted_bandages, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol = sortConsumables()
     
     if sorted_drinks or sorted_conjured_drinks then
-            createDrinkButton(1, false, sorted_drinks, "DrinkOMaticDrinkButton", sorted_conjured_drinks)
+            createDrinkButton(1, false, sorted_drinks, "DrinkOMaticDrinkButton", sorted_conjured_drinks, IS_DRINK_TYPE, NOT_FOOD_TYPE)
     end
 
     if sorted_bandages then
@@ -1463,7 +1534,7 @@ function DOM:createButtons()
     end
 
     if sorted_nb_foods or sorted_conjured_nb_foods then
-        createDrinkButton(1, false, sorted_nb_foods, "DrinkOMaticEatButton", sorted_conjured_nb_foods)
+        createDrinkButton(1, false, sorted_nb_foods, "DrinkOMaticEatButton", sorted_conjured_nb_foods, NOT_DRINK_TYPE, IS_FOOD_TYPE)
     end
 
     if sorted_percent_foods then
