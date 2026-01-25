@@ -593,7 +593,7 @@ function EAT()
 end
 UnitBuff = UnitAura
 local function build_macrotext(itemNames, altItemNames, useDruid, isDrinkMacro, isFoodMacro)
-    local macrotext = "/s .\n"
+    local macrotext = ""
     local conditional = ""
     local buffName = ""
     local alts = 0
@@ -845,6 +845,8 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     if not button.itemDepleted then
         DOM:ButtonRegisterAuras(actualButtonName, itemNames)
     end
+
+    button:RegisterForClicks("AnyDown", "AnyUp")
     
     button:SetAttribute("type", "macro")
     button:SetAttribute("macrotext", macrotext)
