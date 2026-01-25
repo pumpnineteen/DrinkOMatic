@@ -1,5 +1,5 @@
 local addonName, DOM = ...
-DOM = LibStub("AceAddon-3.0"):NewAddon(DOM, "AceConsole-3.0", "AceEvent-3.0")
+DOM = LibStub("AceAddon-3.0"):NewAddon(DOM, addonName, "AceConsole-3.0", "AceEvent-3.0")
 
 -- Initialize localization
 local L = LibStub("AceLocale-3.0"):GetLocale("DrinkOMatic")
@@ -593,7 +593,7 @@ function EAT()
 end
 UnitBuff = UnitAura
 local function build_macrotext(itemNames, altItemNames, useDruid, isDrinkMacro, isFoodMacro)
-    local macrotext = ""
+    local macrotext = "/s .\n"
     local conditional = ""
     local buffName = ""
     local alts = 0
@@ -1928,7 +1928,7 @@ function DOM_Initialize(self)
     self:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND") -- Event for entering a battleground
     self:RegisterEvent("PLAYER_REGEN_ENABLED") -- Event for entering an arena
     -- self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
-    self:RegisterEvent("LEARNED_SPELL_IN_TAB")
+    self:RegisterEvent("SPELLS_CHANGED")
     self:RegisterEvent("UNIT_AURA")
 end
 
