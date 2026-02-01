@@ -65,6 +65,8 @@ DOM.keyBoundClickButton = "LeftButton" -- Default click button for keybindings
 DOM.creatingButton = {} -- Button creation lock
 DOM.buffToButton = {} -- Table to store auras linked to active buttons
 
+local PRINTMACRO = false
+
 local defaultButtonConfig = {
 	outOfRangeColoring = "button",
 	tooltip = "enabled",
@@ -643,7 +645,7 @@ local function build_macrotext(itemNames, altItemNames, useDruid, isDrinkMacro, 
         macrotext = macrotext .. "/stopmacro [mod:alt]\n" .. "/cast " .. getFormName()
     end
     
-    if isDrinkMacro then
+    if isDrinkMacro and PRINTMACRO then
         print("Final macrotext:\n", macrotext)
     end
     return macrotext
@@ -2051,6 +2053,8 @@ function DrinkOMatic_OnLoad(self)
             DOM:ToggleEditMode()
         elseif cmd == "list" then
             DOM:PrintButtonNames()
+        elseif cmd == "printmacro" then
+            PRINTMACRO = not PRINTMACRO
         else
             print("Unknown command: " .. cmd)
             showDomHelp()

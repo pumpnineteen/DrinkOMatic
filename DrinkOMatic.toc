@@ -1,4 +1,4 @@
-## Interface: 11507, 40402
+## Interface: 11508, 50503, 20505
 ## Title: Drink-O-Matic
 ## Notes: Helpful companion for your drinking, and eating pleasure
 ## Author: Pump
