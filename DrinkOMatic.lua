@@ -110,10 +110,14 @@ function DOM:CreateFrame()
 end
 
 local function IsPointInside(frame, x, y)
+    if x == nil then return false end
+    if y == nil then return false end
     local left = frame:GetLeft()
     local right = frame:GetRight()
     local top = frame:GetTop()
     local bottom = frame:GetBottom()
+
+    if left == nil then return false end
 
     return (x >= left and x <= right) and (y >= bottom and y <= top)
 end
@@ -699,7 +703,9 @@ function DOM:StopDragUpdates()
         -- print("Requesting update...")
         DOM:ExitEditMode()
         self:createButtons()
-        DOM.EnterEditMode()
+        if DOM.EnterEditMode then
+            DOM:EnterEditMode()
+        end
     end
 end
 
@@ -733,9 +739,21 @@ function DOM:CheckDropTargetOverlap(x, y)
     end
 end
 
+local function _trySetPoint(button, positions)
+    button:SetPoint(unpack(positions))
+end
+
 function DOM:ButtonSetPoint(button, buttonName)
     if DOM_savedPositions[buttonName] and #DOM_savedPositions[buttonName] > 1 then
-        button:SetPoint(unpack(DOM_savedPositions[buttonName]))
+        local ok, result = pcall(function() _trySetPoint(button, DOM_savedPositions[buttonName]) end)
+        if not ok then
+            print("Error:", result)
+            points = DOM_savedPositions[buttonName]
+            if points[2] ~= nil then
+                points[2] = nil
+                _trySetPoint(button, points)
+            end
+        end
     else
         button:SetPoint("CENTER")
     end
@@ -848,7 +866,10 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         DOM:ButtonRegisterAuras(actualButtonName, itemNames)
     end
 
-    button:RegisterForClicks("AnyDown", "AnyUp")
+    button:RegisterForClicks(
+        "AnyDown", 
+        "AnyUp"
+    )
     
     button:SetAttribute("type", "macro")
     button:SetAttribute("macrotext", macrotext)
@@ -1102,6 +1123,8 @@ end
 function DOM:NormalButtonDrag(button)
     button:SetScript("OnDragStart", function(self)
         if not InCombatLockdown() then
+            self._dragged = true
+            self._dragging = true
             self:StartMoving()
             if DOM.editMode then
                 DOM.draggedButton = self
@@ -1111,6 +1134,7 @@ function DOM:NormalButtonDrag(button)
         end
     end)
     button:SetScript("OnDragStop", function(self)
+        self._dragging = false 
         self:StopMovingOrSizing()
         saveButtonPosition(self)
         DOM:StopDragUpdates()
@@ -1124,12 +1148,15 @@ function DOM:BoundButtonDrag(button)
     button:SetScript("OnDragStart", function(self)
         if DOM.editMode then
             if not InCombatLockdown() then
+                self._dragged = true
+                self._dragging = true
                 self:StartMoving()
             end
         end
     end)
 
     button:SetScript("OnDragStop", function(self)
+        self._dragging = false
         self:StopMovingOrSizing()
         saveButtonPosition(self)
     end)
@@ -1237,6 +1264,33 @@ end
 function DOM:AddButtonScripts(button)
     local isBoundButton = button.isBoundButton or false
 
+    button:SetScript("OnMouseDown", function(self, button)
+        self._mouseDown = true
+        self._dragged = false
+        return
+    end)
+
+
+    button:SetScript("PreClick", function(self, btn)
+        print(self._mouseDown)
+        if self._mouseDown then
+            -- prevent the secure action
+            self._oldType = self:GetAttribute("type")
+            print(self._oldType)
+            self:SetAttribute("type", nil)
+        end
+        print("PRE", self:GetAttribute("type"))
+    end)
+
+    button:SetScript("PostClick", function(self, btn)
+        if self._oldType then
+            self:SetAttribute("type", self._oldType)
+            self._oldType = nil
+        end
+        print(self:GetAttribute("type"))
+    end)
+
+
     if isBoundButton then
         DOM:BoundButtonDrag(button)
         DOM:BoundButtonEditMode(button)
@@ -1244,6 +1298,15 @@ function DOM:AddButtonScripts(button)
     else 
         DOM:NormalButtonDrag(button)
     end
+
+    button:SetScript("OnMouseUp", function(self, button)
+        if self._mouseDown and not self._dragged then
+            self._mouseDown = false
+            button:_OnClick(button)
+        end
+        self._mouseDown = false
+    end)
+
 end
 
 function DOM:EnterEditMode()
@@ -1275,7 +1338,7 @@ function DOM:EnterEditMode()
             if not DOM.Buttons[name] then
                 name = DOM.buttonNameMap:Get(buttonName)
             end
-            DOM.Buttons[name]:EnterEditMode()
+            if DOM.Buttons[name].EnterEditMode then DOM.Buttons[name]:EnterEditMode() end
         else
             local dropTarget = DOM.Buttons[buttonName]
 
@@ -1400,6 +1463,7 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
         self:SetBackdrop(nil)
     end)
 
+    dropTarget:RegisterForClicks("AnyDown", "AnyUp")
     dropTarget:RegisterForDrag("LeftButton")
 
     dropTarget:SetScript("OnDragStart", function(self)
