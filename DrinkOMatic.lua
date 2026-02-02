@@ -87,6 +87,7 @@ local defaultButtonConfig = {
 
 local DEBUG_SHOWMACROTEXT = false
 local DEBUG = false
+local actionDown
 
 local function debugmsg(...)
     if DEBUG then
@@ -857,6 +858,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     end
 
     DOM.Buttons[actualButtonName] = button
+    -- print("Added button:", actualButtonName)
 
     if not button.altItemDepleted then
         DOM:ButtonRegisterAuras(actualButtonName, altItemNames)
@@ -866,10 +868,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         DOM:ButtonRegisterAuras(actualButtonName, itemNames)
     end
 
-    button:RegisterForClicks(
-        "AnyDown", 
-        "AnyUp"
-    )
+    button:RegisterForClicks("AnyDown", "AnyUp")
     
     button:SetAttribute("type", "macro")
     button:SetAttribute("macrotext", macrotext)
@@ -1123,8 +1122,8 @@ end
 function DOM:NormalButtonDrag(button)
     button:SetScript("OnDragStart", function(self)
         if not InCombatLockdown() then
-            self._dragged = true
-            self._dragging = true
+            -- self._dragged = true
+            -- self._dragging = true
             self:StartMoving()
             if DOM.editMode then
                 DOM.draggedButton = self
@@ -1134,7 +1133,7 @@ function DOM:NormalButtonDrag(button)
         end
     end)
     button:SetScript("OnDragStop", function(self)
-        self._dragging = false 
+        -- self._dragging = false 
         self:StopMovingOrSizing()
         saveButtonPosition(self)
         DOM:StopDragUpdates()
@@ -1148,15 +1147,15 @@ function DOM:BoundButtonDrag(button)
     button:SetScript("OnDragStart", function(self)
         if DOM.editMode then
             if not InCombatLockdown() then
-                self._dragged = true
-                self._dragging = true
+                -- self._dragged = true
+                -- self._dragging = true
                 self:StartMoving()
             end
         end
     end)
 
     button:SetScript("OnDragStop", function(self)
-        self._dragging = false
+        -- self._dragging = false
         self:StopMovingOrSizing()
         saveButtonPosition(self)
     end)
@@ -1264,32 +1263,11 @@ end
 function DOM:AddButtonScripts(button)
     local isBoundButton = button.isBoundButton or false
 
-    button:SetScript("OnMouseDown", function(self, button)
-        self._mouseDown = true
-        self._dragged = false
-        return
-    end)
-
-
-    button:SetScript("PreClick", function(self, btn)
-        print(self._mouseDown)
-        if self._mouseDown then
-            -- prevent the secure action
-            self._oldType = self:GetAttribute("type")
-            print(self._oldType)
-            self:SetAttribute("type", nil)
-        end
-        print("PRE", self:GetAttribute("type"))
-    end)
-
-    button:SetScript("PostClick", function(self, btn)
-        if self._oldType then
-            self:SetAttribute("type", self._oldType)
-            self._oldType = nil
-        end
-        print(self:GetAttribute("type"))
-    end)
-
+    -- button:SetScript("OnMouseDown", function(self, button)
+    --     self._mouseDown = true
+    --     self._dragged = false
+    --     return
+    -- end)
 
     if isBoundButton then
         DOM:BoundButtonDrag(button)
@@ -1299,13 +1277,13 @@ function DOM:AddButtonScripts(button)
         DOM:NormalButtonDrag(button)
     end
 
-    button:SetScript("OnMouseUp", function(self, button)
-        if self._mouseDown and not self._dragged then
-            self._mouseDown = false
-            button:_OnClick(button)
-        end
-        self._mouseDown = false
-    end)
+    -- button:SetScript("OnMouseUp", function(self, button)
+    --     if self._mouseDown and not self._dragged then
+    --         self._mouseDown = false
+    --         button:_OnClick(button)
+    --     end
+    --     self._mouseDown = false
+    -- end)
 
 end
 
@@ -1331,6 +1309,7 @@ function DOM:EnterEditMode()
 
     DOM.editMode = true
     DOM:CreateKeyButtons()
+    -- print("EDIT MODE, actionDown:", actionDown)
     for i = 1, DOM.maxButtons do
         local buttonName = DOM.dropBaseName .. i
         if DOM.buttonNameMap:Get(buttonName) then
@@ -1339,6 +1318,10 @@ function DOM:EnterEditMode()
                 name = DOM.buttonNameMap:Get(buttonName)
             end
             if DOM.Buttons[name].EnterEditMode then DOM.Buttons[name]:EnterEditMode() end
+            -- if actionDown then
+            --     print("Disabling clicks for", name)
+            --     DOM.Buttons[name]:RegisterForClicks()
+            -- end
         else
             local dropTarget = DOM.Buttons[buttonName]
 
@@ -1352,6 +1335,13 @@ function DOM:EnterEditMode()
 
             dropTarget:EnableMouse(true)
             dropTarget:SetMovable(true)
+        end
+    end
+    -- print("Disabling clicks...", actionDown)
+    for name, button in pairs(DOM.Buttons) do
+        if actionDown then
+            -- print("Disabling clicks for", name)
+            button:RegisterForClicks()
         end
     end
 end
@@ -1383,6 +1373,9 @@ function DOM:ExitEditMode()
             if DOM.Buttons[name].ExitEditMode then
                 DOM.Buttons[name]:ExitEditMode()
             end
+            -- if actionDown then
+            --     DOM.Buttons[name]:RegisterForClicks("AnyUp", "AnyDown")
+            -- end
         else
             local dropTarget = DOM.Buttons[buttonName]
             -- print("Handling exit edit mode for", buttonName, dropTarget and dropTarget:GetName())
@@ -1401,6 +1394,12 @@ function DOM:ExitEditMode()
                     dropTarget:EnableMouse(false)
                 end
             end
+        end
+    end
+    for name, button in pairs(DOM.Buttons) do
+        if actionDown then
+            -- print("Enabling clicks for", name)
+            button:RegisterForClicks("AnyDown", "AnyUp")
         end
     end
 end
@@ -2102,6 +2101,9 @@ end
 
 function DrinkOMatic_OnLoad(self)
     DOM_Initialize(self)
+
+    actionDown = GetCVar("ActionButtonUseKeyDown") == "1"
+    print("DOM Action fires on key down:", actionDown)
     
     SLASH_DOM1 = "/dom"
     SlashCmdList["DOM"] = function(msg)
@@ -2119,6 +2121,8 @@ function DrinkOMatic_OnLoad(self)
             DOM:PrintButtonNames()
         elseif cmd == "printmacro" then
             PRINTMACRO = not PRINTMACRO
+        elseif cmd == "action" then
+            print(actionDown)
         else
             print("Unknown command: " .. cmd)
             showDomHelp()
