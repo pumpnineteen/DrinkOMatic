@@ -89,6 +89,17 @@ local DEBUG_SHOWMACROTEXT = false
 local DEBUG = false
 local actionDown
 
+local function split(inputstr, delimiter)
+    if delimiter == nil then
+        delimiter = "%s"  -- Default: split by whitespace.
+    end
+    local result = {}
+    for substr in string.gmatch(inputstr, "([^" .. delimiter .. "]+)") do
+        table.insert(result, substr)
+    end
+    return result
+end
+
 local function debugmsg(...)
     if DEBUG then
         local args = {...}
@@ -1987,70 +1998,109 @@ function DOM:UpdateAuras()
     end
 end
 
-function DOM_Initialize(self)
+function DOM:Initialize(self)
     -- Only subscribe to inventory updates once we're in the world
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PLAYER_LEAVING_WORLD")
     self:RegisterEvent("ZONE_CHANGED_NEW_AREA") -- Event for entering an instance or new area
     self:RegisterEvent("PLAYER_ENTERING_BATTLEGROUND") -- Event for entering a battleground
     self:RegisterEvent("PLAYER_REGEN_ENABLED") -- Event for entering an arena
+    self:RegisterEvent("PLAYER_REGEN_DISABLED")
     -- self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
     self:RegisterEvent("SPELLS_CHANGED")
     self:RegisterEvent("UNIT_AURA")
 end
 
+function DOM:PLAYER_ENTERING_WORLD(event, ...)
+    selectForm()
 
+    self:RegisterEvent("BAG_UPDATE")
+    if (InCombatLockdown()) then
 
-function DOM_OnEvent(self, event, arg1, arg2)
-    if ( event == "PLAYER_ENTERING_WORLD" ) then
+    else
+        C_Timer.After(10, ThrottledPickConsumables)
+    end
+    return
+end
 
-        selectForm()
+function DOM:PLAYER_LEAVING_WORLD(event, ...)
+    self:UnregisterEvent("BAG_UPDATE")
+end
 
-		self:RegisterEvent("BAG_UPDATE")
-		if (InCombatLockdown()) then
+function DOM:BAG_UPDATE(event, arg1, ...)
+    if (arg1 < 0 or arg1 > 4) then return end	-- don't bother looking in keyring, bank, etc for food
+    if (DOM_IsSpecialBag(arg1)) then return end	-- don't look in bags that can't hold food, either
+    
+    DOM.updateNeeded = true
 
-		else
-            C_Timer.After(10, ThrottledPickConsumables)
-		end
-		return;
+    ThrottledPickConsumables()
 
-	elseif ( event == "PLAYER_LEAVING_WORLD" ) then
-
-		self:UnregisterEvent("BAG_UPDATE")
-
-	elseif (event == "BAG_UPDATE" ) then
-		if (arg1 < 0 or arg1 > 4) then return end	-- don't bother looking in keyring, bank, etc for food
-		if (DOM_IsSpecialBag(arg1)) then return end	-- don't look in bags that can't hold food, either
-        
-        DOM.updateNeeded = true
-
-        ThrottledPickConsumables()
-
-        if not InCombatLockdown() then
-            DOM:createButtons()
-        end
-
-    elseif (event == "PLAYER_REGEN_ENABLED") then
-        if DOM.updateNeeded then
-            DOM:createButtons()
-        end
-
-    elseif (event == "UNIT_AURA" and arg1 == "player") then
-        DOM:UpdateAuras()
-
-    elseif (event == "LEARNED_SPELL_IN_TAB") then
-        selectForm()
+    if not InCombatLockdown() then
+        DOM:createButtons()
     end
 end
 
--- function DOM:OnEnable(first)
---     print("DrinkOMatic enabling...", first)
--- 	-- LibKeyBound.RegisterCallback(self, "LIBKEYBOUND_ENABLED")
--- 	-- LibKeyBound.RegisterCallback(self, "LIBKEYBOUND_DISABLED")
--- 	-- LibKeyBound.RegisterCallback(self, "LIBKEYBOUND_MODE_COLOR_CHANGED")
+function DOM:PLAYER_REGEN_ENABLED(event, ...)
+    if DOM.updateNeeded then
+        DOM:createButtons()
+    end
+end
+
+function DOM:PLAYER_REGEN_DISABLED(event, ...)
+    -- Entering combat - exit edit mode
+    if DOM.editMode then
+        DOM:ExitEditMode()
+    end
+end
+
+function DOM:UNIT_AURA(event, arg1, ...)
+    if (event == "UNIT_AURA" and arg1 == "player") then
+        DOM:UpdateAuras()
+    end
+end
+
+function DOM:SPELLS_CHANGED(event, ...)
+    selectForm()
+end
+
+function DOM:ZONE_CHANGED_NEW_AREA(event, ...)
+    if DOM.updateNeeded then
+        DOM:createButtons()
+    end
+    DOM:UpdateAuras()
+end
+
+function DOM:PLAYER_ENTERING_BATTLEGROUND(event, ...)
+    DOM:ZONE_CHANGED_NEW_AREA(event)
+end
+
+-- function DOM_OnEvent(self, event, arg1, arg2)
+--     if ( event == "PLAYER_ENTERING_WORLD" ) then
+--         DOM:PLAYER_ENTERING_WORLD(event)
+-- 		return
+
+-- 	elseif ( event == "PLAYER_LEAVING_WORLD" ) then
+
+-- 		self:UnregisterEvent("BAG_UPDATE")
+
+-- 	elseif (event == "BAG_UPDATE" ) then
+-- 		DOM:BAG_UPDATE(event, arg1)
+
+--     elseif (event == "PLAYER_REGEN_ENABLED") then
+--         DOM:PLAYER_REGEN_ENABLED(event)
+--     elseif (event == "PLAYER_REGEN_DISABLED") then
+--         DOM:PLAYER_REGEN_DISABLED(event)
+
+--     elseif (event == "UNIT_AURA" and arg1 == "player") then
+--         DOM:UNIT_AURA(event, arg1)
+
+--     elseif (event == "SPELLS_CHANGED") then
+--         DOM:SPELLS_CHANGED(event)
+--     end
 -- end
 
 function DOM:OnInitialize()
+    print("DOM Initializing...")
     DOM.callbacks = DOM.callbacks or LibStub("CallbackHandler-1.0"):New(DOM)
 
     DOM.buttonNameMap = TwoWayMap:new(DOM_BoundToNames, DOM_RealNames, "GetBoundToName", "GetRealName")
@@ -2068,6 +2118,12 @@ function DOM:OnInitialize()
         -- _G[("BINDING_NAME_CLICK DOMButton%d"):format(k)] = ("%s %s"):format(name, L["Button %s"]:format(k))
     end
 
+    DOM:Initialize(self)
+
+    actionDown = GetCVar("ActionButtonUseKeyDown") == "1"
+
+    self:RegisterChatCommand("dom", "HandleSlashCommand")
+
 end
 
 function DOM:PrintButtonNames()
@@ -2076,7 +2132,15 @@ function DOM:PrintButtonNames()
     end
 end
 
+local function showDomHelp()
+    print("Usage: /dom <option>")
+    print("Available options:")
+    print("  kb    - Toggle keybind mode")
+    print("  edit  - Toggle edit mode")
+end
+
 function DOM:OnEnable()
+    -- DOM:DoInitialize()
     print("DrinkOMatic is enabled...")
     
     DOM:RegisterCallback("DraggingUpdate", function(event, x, y)
@@ -2092,41 +2156,27 @@ function DOM:OnEnable()
 
 end
 
-local function showDomHelp()
-    print("Usage: /dom <option>")
-    print("Available options:")
-    print("  kb    - Toggle keybind mode")
-    print("  edit  - Toggle edit mode")
-end
+function DOM:HandleSlashCommand(msg)
+    local args = split(msg)
+    local cmd = args[1]
 
-function DrinkOMatic_OnLoad(self)
-    DOM_Initialize(self)
-
-    actionDown = GetCVar("ActionButtonUseKeyDown") == "1"
-    print("DOM Action fires on key down:", actionDown)
-    
-    SLASH_DOM1 = "/dom"
-    SlashCmdList["DOM"] = function(msg)
-        local cmd = (msg or ""):match("^%s*(.-)%s*$")
-
-        if cmd == "" then
-            showDomHelp()
-        elseif cmd == "kb" then
-            print("Toggling keybind mode")
-            LibKeyBound:Toggle()
-        elseif cmd == "edit" then
-            print("Toggling edit mode")
-            DOM:ToggleEditMode()
-        elseif cmd == "list" then
-            DOM:PrintButtonNames()
-        elseif cmd == "printmacro" then
-            PRINTMACRO = not PRINTMACRO
-        elseif cmd == "action" then
-            print(actionDown)
-        else
-            print("Unknown command: " .. cmd)
-            showDomHelp()
-        end
+    if cmd == "" then
+        showDomHelp()
+    elseif cmd == "kb" then
+        print("Toggling keybind mode")
+        LibKeyBound:Toggle()
+    elseif cmd == "edit" then
+        print("Toggling edit mode")
+        DOM:ToggleEditMode()
+    elseif cmd == "list" then
+        DOM:PrintButtonNames()
+    elseif cmd == "printmacro" then
+        PRINTMACRO = not PRINTMACRO
+    elseif cmd == "action" then
+        print(actionDown)
+    else
+        print("Unknown command: " .. cmd)
+        showDomHelp()
     end
 end
 
