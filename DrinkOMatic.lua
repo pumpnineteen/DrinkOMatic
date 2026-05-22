@@ -450,7 +450,7 @@ local function GetBestConsumables()
             if itemID then
                 local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemID)
                 local itemData = itemCategories[itemID]
-                if itemData then
+                if itemData and itemName then
                     DOM.itemIDMap[itemName] = itemID
                     if itemID < 10 then
                         print("ItemID is less than 10: ", itemID, itemName)
@@ -492,6 +492,8 @@ local function GetBestConsumables()
                     elseif category == "Other" then
                         table.insert(bestConsumables.other, itemName)
                     end
+                elseif not itemName then
+                    print("Missing item name for itemID: ", itemID)
                 end
             end
         end
@@ -1591,6 +1593,7 @@ function DOM:createButtons()
     if InCombatLockdown() then return end
     if DOM.runningButtonCreation then return end
     DOM.runningButtonCreation = true
+    print("Creating buttons...")
     
     -- Save current buttons that need to be cleared
     clearButtons()
@@ -2009,6 +2012,25 @@ function DOM:Initialize(self)
     -- self:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
     self:RegisterEvent("SPELLS_CHANGED")
     self:RegisterEvent("UNIT_AURA")
+    self:RegisterEvent("TRADE_CLOSED")
+    self:RegisterEvent("MERCHANT_CLOSED")
+end
+
+-- React when trades or merchant interactions finish so we can pick up new items
+function DOM:TRADE_CLOSED(event, ...)
+    -- Slight delay to allow the server/client to update bags
+    C_Timer.After(0.25, ThrottledPickConsumables)
+    if not InCombatLockdown() then
+        C_Timer.After(0.5, function() DOM:createButtons() end)
+    end
+end
+
+function DOM:MERCHANT_CLOSED(event, ...)
+    -- After buying from vendors, update consumables list
+    C_Timer.After(0.25, ThrottledPickConsumables)
+    if not InCombatLockdown() then
+        C_Timer.After(0.5, function() DOM:createButtons() end)
+    end
 end
 
 function DOM:PLAYER_ENTERING_WORLD(event, ...)
@@ -2041,12 +2063,16 @@ function DOM:BAG_UPDATE(event, arg1, ...)
 end
 
 function DOM:PLAYER_REGEN_ENABLED(event, ...)
-    if DOM.updateNeeded then
+    -- if DOM.updateNeeded then
         DOM:createButtons()
-    end
+    -- end
 end
 
 function DOM:PLAYER_REGEN_DISABLED(event, ...)
+    if DOM.runningButtonCreation then
+        DOM.updateNeeded = true
+    end
+    DOM.runningButtonCreation = false
     -- Entering combat - exit edit mode
     if DOM.editMode then
         DOM:ExitEditMode()
