@@ -803,7 +803,7 @@ end
 
 local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames, isDrinkType, isFoodType)
     if DOM.creatingButton[buttonName] then 
-        print("Already creating button: ", buttonName, " skipping to prevent recursion...")    
+        debugmsg("Already creating button: ", buttonName, " skipping to prevent recursion...")    
         return 
     end
     DOM.creatingButton[buttonName] = true
@@ -811,7 +811,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     local altItemName = (altItemNames and altItemNames[1]) or nil  -- Use the first item from altItemNames
     itemName = itemName or altItemName or nil
     if not itemName then
-        print("No item name found for button: ", buttonName, " skipping button creation.")
+        debugmsg("No item name found for button: ", buttonName, " skipping button creation.")
         DOM.creatingButton[buttonName] = nil
         return 
     end
