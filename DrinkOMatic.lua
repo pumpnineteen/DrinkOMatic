@@ -118,6 +118,8 @@ end
 function DOM:CreateFrame()
     DOM.header = CreateFrame("Frame", "DOM_header", UIParent, "SecureHandlerStateTemplate")
     DOM.drop   = CreateFrame("Frame", "DOM_drop", UIParent, "SecureHandlerStateTemplate")
+    DOM.header:SetClampedToScreen(true)
+    DOM.drop:SetClampedToScreen(true)
     DOM.header:Show()
 end
 
@@ -800,12 +802,17 @@ function DOM:GetItemID(itemName)
 end
 
 local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames, isDrinkType, isFoodType)
-    if DOM.creatingButton[buttonName] then return end
+    if DOM.creatingButton[buttonName] then 
+        print("Already creating button: ", buttonName, " skipping to prevent recursion...")    
+        return 
+    end
     DOM.creatingButton[buttonName] = true
     local itemName = (itemNames and itemNames[1]) or nil    -- Use the first item from itemNames
     local altItemName = (altItemNames and altItemNames[1]) or nil  -- Use the first item from altItemNames
     itemName = itemName or altItemName or nil
-    if not itemName then 
+    if not itemName then
+        print("No item name found for button: ", buttonName, " skipping button creation.")
+        DOM.creatingButton[buttonName] = nil
         return 
     end
 
@@ -1115,6 +1122,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     
     button:SetMovable(true)
+    button:SetClampedToScreen(true)
     button:RegisterForDrag("LeftButton")
     
     DOM:AddButtonScripts(button)   
@@ -1348,6 +1356,7 @@ function DOM:EnterEditMode()
 
             dropTarget:EnableMouse(true)
             dropTarget:SetMovable(true)
+            dropTarget:SetClampedToScreen(true)
         end
     end
     -- print("Disabling clicks...", actionDown)
@@ -1448,6 +1457,8 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
     DOM.Buttons[buttonName] = dropTarget
     
     dropTarget:SetSize(DOM.buttonSize, DOM.buttonSize)
+    dropTarget:SetClampedToScreen(true)
+    dropTarget:Show()
 
     -- if DOM_savedPositions[buttonName] then
     --     DOM:ButtonSetPoint(dropTarget, buttonName)
@@ -1467,6 +1478,7 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
         self:SetBackdrop({ bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background" })
         if LibKeyBound then
             -- print("KeyBound: ", buttonName, " is bound to: ", self:GetHotkey())
+            debugmsg("KeyBound: ", buttonName, " is bound to: ", self:GetHotkey())      
             LibKeyBound:Set(self)
         end
     end)
@@ -1491,6 +1503,7 @@ function DOM:CreateDropTarget(buttonName, buttonNum)
 
     -- Make button movable out of combat
     dropTarget:SetMovable(DOM.editMode)
+    dropTarget:SetClampedToScreen(true)
     dropTarget:RegisterForDrag("LeftButton")
     dropTarget:SetScript("OnDragStart", function(self)
         if not InCombatLockdown() then
@@ -1526,7 +1539,10 @@ local function amIaDruid()
 end
 
 local function clearButtons()
-    if InCombatLockdown() then return end
+    if InCombatLockdown() then 
+        debugmsg("Cannot clear buttons while in combat.")
+        return  
+    end
     local buttonsToRemove = {}
     -- First identify buttons to remove
     for buttonName, button in pairs(DOM.Buttons) do
@@ -1592,8 +1608,15 @@ local NOT_FOOD_TYPE = false
 function DOM:createButtons()
     if InCombatLockdown() then return end
     if DOM.runningButtonCreation then return end
+    local lastCreationTime = DOM.lastButtonCreationTime or 0
+    local currentTime = GetTime()
+    if currentTime - lastCreationTime < 1 then
+        DOM.updateNeeded = true
+        return
+    end
+    DOM.lastButtonCreationTime = currentTime
     DOM.runningButtonCreation = true
-    print("Creating buttons...")
+    debugmsg("Creating buttons...")
     
     -- Save current buttons that need to be cleared
     clearButtons()
@@ -1664,6 +1687,18 @@ function DOM:createButtons()
     end  
     DOM.runningButtonCreation = false
     DOM.buttonsInitialized = true
+    debugmsg("Buttons created.")
+    
+    for itemName, _ in pairs(DOM.creatingButton) do
+        debugmsg("Hanging button creation found for:", itemName)
+        DOM.creatingButton = {}
+        if itemName then
+            C_Timer.After(1, function ()
+                DOM:createButtons()
+            end)
+        end
+        return
+    end
 end
 
 local function selectForm()
@@ -1679,6 +1714,7 @@ local function selectForm()
     frame:SetSize(frameWidth, frameHeight)
     frame:Show()
     frame:SetMovable(true)
+    frame:SetClampedToScreen(true)
 
     if DOM_savedPositions["MyShapeshiftFrame"] then
         frame:SetPoint(unpack(DOM_savedPositions["MyShapeshiftFrame"]))
@@ -1724,6 +1760,7 @@ local function selectForm()
         -- Enable mouse interaction and dragging
         button:EnableMouse(true)
         button:SetMovable(true)
+        button:SetClampedToScreen(true)
         button:RegisterForDrag("LeftButton")
 
         button:SetScript("OnDragStart", function(self)
@@ -2091,39 +2128,17 @@ end
 
 function DOM:ZONE_CHANGED_NEW_AREA(event, ...)
     if DOM.updateNeeded then
-        DOM:createButtons()
+        C_Timer.After(0, function()
+            DOM:createButtons()
+        end
+        )
     end
-    DOM:UpdateAuras()
+    -- DOM:UpdateAuras()
 end
 
 function DOM:PLAYER_ENTERING_BATTLEGROUND(event, ...)
     DOM:ZONE_CHANGED_NEW_AREA(event)
 end
-
--- function DOM_OnEvent(self, event, arg1, arg2)
---     if ( event == "PLAYER_ENTERING_WORLD" ) then
---         DOM:PLAYER_ENTERING_WORLD(event)
--- 		return
-
--- 	elseif ( event == "PLAYER_LEAVING_WORLD" ) then
-
--- 		self:UnregisterEvent("BAG_UPDATE")
-
--- 	elseif (event == "BAG_UPDATE" ) then
--- 		DOM:BAG_UPDATE(event, arg1)
-
---     elseif (event == "PLAYER_REGEN_ENABLED") then
---         DOM:PLAYER_REGEN_ENABLED(event)
---     elseif (event == "PLAYER_REGEN_DISABLED") then
---         DOM:PLAYER_REGEN_DISABLED(event)
-
---     elseif (event == "UNIT_AURA" and arg1 == "player") then
---         DOM:UNIT_AURA(event, arg1)
-
---     elseif (event == "SPELLS_CHANGED") then
---         DOM:SPELLS_CHANGED(event)
---     end
--- end
 
 function DOM:OnInitialize()
     print("DOM Initializing...")
