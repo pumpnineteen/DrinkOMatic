@@ -764,7 +764,7 @@ function DOM:ButtonSetPoint(button, buttonName)
         local ok, result = pcall(function() _trySetPoint(button, DOM_savedPositions[buttonName]) end)
         if not ok then
             print("Error:", result)
-            points = DOM_savedPositions[buttonName]
+            local points = DOM_savedPositions[buttonName]
             if points[2] ~= nil then
                 points[2] = nil
                 _trySetPoint(button, points)
