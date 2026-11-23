@@ -412,7 +412,7 @@ end
 
 
 local function addOrderedCategory(itemList, category, subcategory)
-    if not itemLua then
+    if not itemList then
         print("Error: itemList is nil for category:", category, "subcategory:", subcategory)
         return
     end
