@@ -44,6 +44,9 @@ LibKeyBound.Binder = LibKeyBound.Binder or {}
 
 local SaveBindings = SaveBindings or AttemptToSaveBindings
 local WoW10 = select(4, GetBuildInfo()) >= 100000
+if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CAMELOT then
+	WoW10 = true
+end
 
 -- #NODOC
 function LibKeyBound:Initialize()

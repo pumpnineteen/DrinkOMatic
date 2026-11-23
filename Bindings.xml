@@ -1,5 +1,14 @@
 <Bindings>
-    <Binding name="CLICK DOMButton1:Keybind" header="DOMHEAD" category="Drink-o-Matic "/>
+    <Binding name="CLICK DOMButton_DRINK:Keybind" header="DOMHEAD" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_EAT:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_HEALTHSTONE:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_HEALTHPOT:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_MANAPOT:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_MANAGEM:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_DREAM:Keybind" category="Drink-o-Matic "/>
+	<Binding name="CLICK DOMButton_BANDAGE:Keybind" category="Drink-o-Matic "/>
+
+	<Binding name="CLICK DOMButton1:Keybind" category="Drink-o-Matic "/>
 	<Binding name="CLICK DOMButton2:Keybind" category="Drink-o-Matic "/>
 	<Binding name="CLICK DOMButton3:Keybind" category="Drink-o-Matic "/>
 	<Binding name="CLICK DOMButton4:Keybind" category="Drink-o-Matic "/>

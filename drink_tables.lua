@@ -1,3 +1,5 @@
+local addonName, DOM = ...
+
 DEBUG = true
 DEBUG_HS = true
 DEBUG_HP = true

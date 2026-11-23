@@ -42,14 +42,52 @@ local MediaBase = "Interface\\AddOns\\" .. addonName .. "\\media\\"
 -- Expansion determination code from LibBagUtils.lua
 local WOW_PROJECT_ID = _G.WOW_PROJECT_ID
 local WOW_PROJECT_CLASSIC = _G.WOW_PROJECT_CLASSIC
+local WOW_PROJECT_CAMELOT = _G.WOW_PROJECT_CAMELOT
 local WOW_PROJECT_BURNING_CRUSADE_CLASSIC = _G.WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 local WOW_PROJECT_WRATH_CLASSIC = _G.WOW_PROJECT_WRATH_CLASSIC
 local WOW_PROJECT_CATACLYSM_CLASSIC = _G.WOW_PROJECT_CATACLYSM_CLASSIC
+local WOW_PROJECT_MISTS_CLASSIC = _G.WOW_PROJECT_MISTS_CLASSIC
 local WOW_PROJECT_MAINLINE = _G.WOW_PROJECT_MAINLINE
 local LE_EXPANSION_LEVEL_CURRENT = _G.LE_EXPANSION_LEVEL_CURRENT
 local LE_EXPANSION_BURNING_CRUSADE =_G.LE_EXPANSION_BURNING_CRUSADE
 local LE_EXPANSION_WRATH_OF_THE_LICH_KING = _G.LE_EXPANSION_WRATH_OF_THE_LICH_KING
 local LE_EXPANSION_CATACLYSM = _G.LE_EXPANSION_CATACLYSM
+local LE_EXPANSION_MISTS = _G.LE_EXPANSION_MISTS_OF_PANDARIA
+
+local function IsClassicWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+end
+
+local function IsTBCWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_BURNING_CRUSADE
+end
+
+local function IsWrathWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_WRATH_OF_THE_LICH_KING
+end
+
+local function IsCataWow() --luacheck: ignore 212
+    return WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_CATACLYSM
+end
+
+local function IsMopWow()
+    return WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC and LE_EXPANSION_LEVEL_CURRENT == LE_EXPANSION_MISTS
+end
+
+local function IsForever()
+    return WOW_PROJECT_ID == WOW_PROJECT_CAMELOT
+end
+
+local GetItemInfo = _G.GetItemInfo or _G.C_Item and _G.C_Item.GetItemInfo
+local GetItemInfoInstant = _G.GetItemInfoInstant or _G.C_Item and _G.C_Item.GetItemInfoInstant
+local GetItemCount = _G.GetItemCount or _G.C_Item and _G.C_Item.GetItemCount
+local UnitAura = _G.UnitAura or _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByIndex
+local CombatRestrictedAuras = _G.C_UnitAuras and _G.C_UnitAuras.GetAuraDataByIndex
+if CombatRestrictedAuras then
+    print("Auras are combat-restricted!")
+end
+
+local _OptionsCheckButtonTemplate = (IsForever() and "UICheckButtonTemplate") or "OptionsCheckButtonTemplate"
 
 DOM_savedPositions = DOM_savedPositions or {} -- Table to store button positions
 DOM_RealNames = DOM_RealNames or {} 
@@ -301,12 +339,14 @@ end
 local itemCategories = {}
 
 DOM.Buttons = {}
-DOM_BEAR = "BEAR"
-DOM_CAT = "CAT"
-DOM_MOONKIN = "MOONKIN"
-DOM_ReturnToForm = DOM_BEAR
-DOM_DRUID = false
-DOM_NOFORM = "NOFORM"
+local DOM_BEAR = "BEAR"
+local DOM_CAT = "CAT"
+local DOM_MOONKIN = "MOONKIN"
+local DOM_ReturnToForm = DOM_BEAR
+local DOM_DRUID = false
+local DOM_NOFORM = "NOFORM"
+
+local IsMage = false
 
 local drinks
 local conjured_drinks
@@ -326,13 +366,36 @@ local alcohol
 local other_consumables
 local buff_map
 
+local defaultIDMap = {
+    ["Ice Cold Milk"] = 1179,
+    ["Heavy Runecloth Bandage"] = 14530,
+    ["Superior Healing Potion"] = 3928,
+    ["Haunch of Meat"] = 2287,
+    ["Superior Mana Potion"] = 13443,
+    ["Healthstone"] = 5509,
+    ["Mana Jade"] = 5513,
+    ["Dreamless Sleep Potion"] = 12190,
+}
+
+-- local defaultButtons = {
+--     [("DOMButton_DRINK")] = "",
+-- 	[("DOMButton_EAT")] = "",
+-- 	[("DOMButton_HEALTHSTONE")] = "",
+-- 	[("DOMButton_HEALTHPOT")] = "",
+-- 	[("DOMButton_MANAPOT")] = "",
+-- 	[("DOMButton_MANAGEM")] = "",
+-- 	[("DOMButton_DREAM")] = "",
+-- 	[("DOMButton_BANDAGE")] = "",
+-- }
+
 local function get_tables()
-    if IsClassicWow() or IsTBCWow() then
+    if IsClassicWow() or IsTBCWow() or IsForever() then
         buff_map = tbc_consumables
         drinks = tbc_drinks
         conjured_drinks = tbc_conjured_drinks
         healing_potions = tbc_healing_potions
         mana_potions = tbc_mana_potions
+        mana_gems = tbc_mana_gems
         bandages = tbc_bandages
         specific_healing_potions = tbc_specific_healing_potions
         specific_mana_potions = tbc_specific_mana_potions
@@ -349,6 +412,10 @@ end
 
 
 local function addOrderedCategory(itemList, category, subcategory)
+    if not itemLua then
+        print("Error: itemList is nil for category:", category, "subcategory:", subcategory)
+        return
+    end
     for rank, itemID in ipairs(itemList) do
         itemCategories[itemID] = {
             category = category,
@@ -361,6 +428,10 @@ local function addOrderedCategory(itemList, category, subcategory)
 end
 
 local function addUnorderedCategory(itemList, category)
+    if not itemList then
+        print("Error: itemList is nil for category:", category)
+        return
+    end
     for _, item in ipairs(itemList) do
         if type(item) == "number" then
             itemCategories[item] = {
@@ -585,30 +656,34 @@ local function is_druid_button(tryDruid, itemID)
 end
 
 function DRNK()
-    for i=1,40 do 
-        local buff = UnitAura("player",i)
-        if not buff then
-            return false
-        end
-        if buff =="Drink" then
-            return 
-        else 
-            print(i, buff)
+    if CombatRestrictedAuras and not InCombatLockdown() then
+        for i=1,40 do 
+            local buff = UnitAura("player",i)
+            if not buff then
+                return false
+            end
+            if buff =="Drink" then
+                return 
+            else 
+                print(i, buff)
+            end
         end
     end
     return false
 end
 
 function EAT()
-    for i=1,40 do 
-        local buff = UnitAura("player",i)
-        if not buff then
-            return false
-        end
-        if buff =="Food" then
-            return true
-        else 
-            print(i, buff)
+    if CombatRestrictedAuras and not InCombatLockdown() then
+        for i=1,40 do 
+            local buff = UnitAura("player",i)
+            if not buff then
+                return false
+            end
+            if buff =="Food" then
+                return true
+            else 
+                print(i, buff)
+            end
         end
     end
     return false
@@ -797,11 +872,20 @@ end
 -- end
 
 function DOM:GetItemID(itemName)
-    local itemID = itemName and DOM.itemIDMap[itemName] or nil
+    local itemID = (itemName and (DOM.itemIDMap[itemName] or defaultIDMap[itemName])) or nil
     return itemID
 end
 
-local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altItemNames, isDrinkType, isFoodType)
+local function createDrinkButton(createButtonTable)
+    local persistentDefault = createButtonTable["persistentDefault"] or nil
+    local tryDruid = createButtonTable["tryDruid"] or false
+    local itemNames = createButtonTable["itemNames"] or nil
+    local altItemNames = createButtonTable["altItemNames"] or nil
+    local buttonName = createButtonTable["buttonName"] or nil
+    local isDrinkType = createButtonTable["isDrinkType"] or false
+    local isFoodType = createButtonTable["isFoodType"] or false
+    local defaultBoundName = createButtonTable["defaultBoundName"] or nil
+
     if DOM.creatingButton[buttonName] then 
         debugmsg("Already creating button: ", buttonName, " skipping to prevent recursion...")    
         return 
@@ -809,7 +893,9 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     DOM.creatingButton[buttonName] = true
     local itemName = (itemNames and itemNames[1]) or nil    -- Use the first item from itemNames
     local altItemName = (altItemNames and altItemNames[1]) or nil  -- Use the first item from altItemNames
-    itemName = itemName or altItemName or nil
+    local isDefault = not (itemName or altItemName) and persistentDefault  -- If both are nil, it's a default button
+    itemName = itemName or altItemName or persistentDefault
+    
     if not itemName then
         debugmsg("No item name found for button: ", buttonName, " skipping button creation.")
         DOM.creatingButton[buttonName] = nil
@@ -818,9 +904,13 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     local itemID = DOM:GetItemID(itemName)
 
+    if isDefault then
+        debugmsg("Is Default:", isDefault, itemName, itemID)
+    end
+
     local useDruid = is_druid_button(tryDruid, itemID)
 
-    local macrotext = build_macrotext(itemNames, altItemNames, useDruid, isDrinkType, isFoodType)
+    local macrotext = (isDefault and "#showtooltip " .. persistentDefault) or build_macrotext(itemNames, altItemNames, useDruid, isDrinkType, isFoodType)
 
     if DEBUG_SHOWMACROTEXT then
         debug_macrotext(buttonName, itemName, itemNames, macrotext)
@@ -830,8 +920,9 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     -- CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
     local isBoundButton = false
     local actualButtonName = buttonName
-    if DOM.buttonNameMap:Get(buttonName) then
-        actualButtonName = DOM.buttonNameMap:Get(buttonName)
+    local _realButtonName =  DOM.buttonNameMap:Get(buttonName) or defaultBoundName
+    if _realButtonName then
+        actualButtonName = _realButtonName
         isBoundButton = true
         debugmsg("Found button: ", buttonName, DOM.buttonNameMap:GetBoundToName(buttonName), DOM.buttonNameMap:GetRealName(buttonName))
     end
@@ -854,15 +945,21 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button.itemIndex = 1
     button.altItemIndex = 1
     button.isPinned = false
-    button.isDesaturated = false
     button.lastBAG_UPDATE_COOLDOWN = GetTime()
-    button.isDesaturated = false 
+    button.isDesaturated = isDefault or false
+    button.isDefault = isDefault or false
     button.hasAura = button.hasAura or false
+
+    if persistentDefault then
+        button.isPinned = true
+    end
 
     if not altItemNames then 
         button.altItemDepleted = true
+        button.altItemCount = 0
     else
         local itemCount = (altItemNames[1] and GetItemCount(altItemNames[1], false, true)) or 0
+        button.altItemCount = itemCount
         if itemCount == 0 then
             button.altItemDepleted = true
         end 
@@ -870,11 +967,19 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
 
     if not itemNames then
         button.itemDepleted = true
+        button.itemCount = 0
     else
         local itemCount = (itemNames[1] and GetItemCount(itemNames[1], false, true)) or 0
+        button.itemCount = itemCount
         if itemCount == 0 then
             button.itemDepleted = true
         end
+    end
+
+    if isDefault then
+        button.isDesaturated = true
+        button.itemCount = 0
+        button.altItemCount = 0
     end
 
     DOM.Buttons[actualButtonName] = button
@@ -905,14 +1010,19 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button:SetSize(DOM.buttonSize, DOM.buttonSize)
     
     -- Set the button texture and icon
-    local itemTexture = GetItemIcon(itemName)
+    local itemTexture = C_Item.GetItemIconByID(itemID)
+    if isDefault then
+        debugmsg("Default texture:", itemTexture, itemName)
+    end
 
     local altTexture = nil
     local altItemID = nil
 
     if altItemName then
-        altTexture = GetItemIcon(altItemName)
         altItemID = DOM:GetItemID(altItemName)
+        if altItemID then
+            altTexture = C_Item.GetItemIconByID(altItemID)
+        end
     end
 
     local buttonTexture = button.buttonTexture
@@ -933,6 +1043,12 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     buttonTexture:SetPoint("CENTER")
     buttonTexture:Show()
     button.buttonTexture = buttonTexture
+
+    if button.isDesaturated then
+        button.buttonTexture:SetDesaturated(true)
+    else
+        button.buttonTexture:SetDesaturated(false)
+    end
 
     if useDruid then
         local form = button.form
@@ -956,14 +1072,14 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         
-        if IsControlKeyDown() then
+        if IsControlKeyDown() and not button.itemDepleted then
             -- print("Control: ", itemName)
-            GameTooltip:SetHyperlink("item:" .. GetItemInfoInstant(itemName))
+            GameTooltip:SetHyperlink("item:" .. (GetItemInfoInstant(itemName) or itemID))
         else
-            if altItemName then
-                GameTooltip:SetHyperlink("item:" .. GetItemInfoInstant(altItemName))
-            else
-                GameTooltip:SetHyperlink("item:" .. GetItemInfoInstant(itemName))
+            if altItemName and not button.altItemDepleted then
+                GameTooltip:SetHyperlink("item:" .. (GetItemInfoInstant(altItemName) or altItemID))
+            elseif not button.itemDepleted then    
+                GameTooltip:SetHyperlink("item:" .. (GetItemInfoInstant(itemName) or itemID))
             end
         end
         
@@ -1002,6 +1118,7 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
         end
         local itemCount = GetItemCount(item, false, true)
         button.count:SetText(itemCount)
+        button.itemCount = itemCount
         return itemCount, isAltItem
     end
 
@@ -1086,15 +1203,20 @@ local function createDrinkButton(buttonID, tryDruid, itemNames, buttonName, altI
                         self.cooldownProgress = IsOnCooldown(start, duration)
                     end
                     if not self.cooldownProgress then
-                        if self.isDesaturated then
+                        if self.isDesaturated and (self.itemCount or self.altItemCount) and (not self.isDefault) then
                             self.buttonTexture:SetDesaturated(false)
                             self.isDesaturated = false
                             self.cooldownStarted = false
                             self:SetScript("OnUpdate", nil)
                         end
-                    end 
+                    end
+                    if (self.itemCount == 0 and self.altItemCount == 0) or self.isDefault then
+                        if not self.isDesaturated then
+                            self.buttonTexture:SetDesaturated(true)
+                            self.isDesaturated = true
+                        end
+                    end
                 end
-                
             end)
         end
     end
@@ -1538,6 +1660,14 @@ local function amIaDruid()
     return false
 end
 
+local function amIaMage()
+    if IsClassicWow() then
+        local _, class = UnitClass("player")
+        return class == "MAGE"
+    end
+    return false
+end
+
 local function clearButtons()
     if InCombatLockdown() then 
         debugmsg("Cannot clear buttons while in combat.")
@@ -1625,58 +1755,132 @@ function DOM:createButtons()
     -- Rest of button creation logic
     local sorted_drinks, sorted_conjured_drinks, sorted_bandages, sorted_healing_potions, sorted_specific_healing_potions, sorted_mana_potions, sorted_specific_mana_potions, sorted_healthstones, sorted_mana_gems, sorted_nb_foods, sorted_conjured_nb_foods, sorted_percent_foods, sorted_alcohol = sortConsumables()
     
-    if sorted_drinks or sorted_conjured_drinks then
-            createDrinkButton(1, false, sorted_drinks, "DrinkOMaticDrinkButton", sorted_conjured_drinks, IS_DRINK_TYPE, NOT_FOOD_TYPE)
+    if sorted_drinks or sorted_conjured_drinks or true then
+            createDrinkButton({
+                persistentDefault = "Ice Cold Milk",
+                tryDruid = false,
+                itemNames = sorted_drinks,
+                buttonName = "DrinkOMaticDrinkButton",
+                altItemNames = sorted_conjured_drinks,
+                isDrinkType = IS_DRINK_TYPE,
+                isFoodType = NOT_FOOD_TYPE,
+                defaultBoundName = "DOMButton_DRINK"
+            })
     end
 
-    if sorted_bandages then
-        createDrinkButton(1, false, sorted_bandages, "DrinkOMaticBandageButton")
+    if sorted_bandages or true then
+        createDrinkButton({
+            persistentDefault = "Heavy Runecloth Bandage",
+            tryDruid = false,
+            itemNames = sorted_bandages,
+            buttonName = "DrinkOMaticBandageButton",
+            isDrinkType = NOT_DRINK_TYPE,
+            isFoodType = NOT_FOOD_TYPE,
+            defaultBoundName = "DOMButton_BANDAGE"
+        })
     end
 
-    if sorted_healing_potions or sorted_specific_healing_potions then
-        createDrinkButton(2, DOM_DRUID, sorted_healing_potions, "DrinkOMaticHealingPotionButton", sorted_specific_healing_potions)
+    if sorted_healing_potions or sorted_specific_healing_potions or true then
+        createDrinkButton({
+            persistentDefault = "Superior Healing Potion",
+            tryDruid = DOM_DRUID,
+            itemNames = sorted_healing_potions,
+            buttonName = "DrinkOMaticHealingPotionButton",
+            altItemNames = sorted_specific_healing_potions,
+            isDrinkType = NOT_DRINK_TYPE,
+            isFoodType = NOT_FOOD_TYPE,
+            defaultBoundName = "DOMButton_HEALING_POTION"
+        })
     end
 
-    if sorted_nb_foods or sorted_conjured_nb_foods then
-        createDrinkButton(1, false, sorted_nb_foods, "DrinkOMaticEatButton", sorted_conjured_nb_foods, NOT_DRINK_TYPE, IS_FOOD_TYPE)
+    if sorted_nb_foods or sorted_conjured_nb_foods or true then
+        createDrinkButton({
+            persistentDefault = "Haunch of Meat",
+            tryDruid = false,
+            itemNames = sorted_nb_foods,
+            buttonName = "DrinkOMaticEatButton",
+            altItemNames = sorted_conjured_nb_foods,
+            isDrinkType = NOT_DRINK_TYPE,
+            isFoodType = IS_FOOD_TYPE
+        })
     end
 
     if sorted_percent_foods then
-        createDrinkButton(1, false, sorted_percent_foods, "DrinkOMaticPEatButton")
+        createDrinkButton({
+            persistentDefault = nil,
+            tryDruid = false,
+            itemNames = sorted_percent_foods,
+            buttonName = "DrinkOMaticPEatButton"
+        })
     end
 
     if sorted_alcohol then
-        createDrinkButton(1, false, sorted_alcohol, "DrinkOMaticDrunkButton")
+        createDrinkButton({
+            persistentDefault = nil,
+            tryDruid = false,
+            itemNames = sorted_alcohol,
+            buttonName = "DrinkOMaticDrunkButton"
+        })
     end
 
-    if sorted_mana_potions or sorted_specific_mana_potions then
-        createDrinkButton(3, DOM_DRUID, sorted_mana_potions, "DrinkOMaticManaPotionButton", sorted_specific_mana_potions)
+    if sorted_mana_potions or sorted_specific_mana_potions or true then
+        createDrinkButton({
+            persistentDefault = "Superior Mana Potion",
+            tryDruid = DOM_DRUID,
+            itemNames = sorted_mana_potions,
+            buttonName = "DrinkOMaticManaPotionButton",
+            altItemNames = sorted_specific_mana_potions
+        })
     end
 
-    if sorted_healthstones then
-        createDrinkButton(4, DOM_DRUID, sorted_healthstones, "DrinkOMaticHealthStoneButton")
-  
+    if sorted_healthstones or true then
+        createDrinkButton({
+            persistentDefault = "Healthstone",
+            tryDruid = DOM_DRUID,
+            itemNames = sorted_healthstones,
+            buttonName = "DrinkOMaticHealthStoneButton"
+        })
     end
 
-    if sorted_mana_gems then
-        createDrinkButton(5, false, sorted_mana_gems, "DrinkOMaticManaGemButton")
+    if IsMage then
+        createDrinkButton({
+            persistentDefault = "Mana Jade",
+            tryDruid = false,
+            itemNames = sorted_mana_gems,
+            buttonName = "DrinkOMaticManaGemButton"
+        })
     end
 
     if bestConsumables.scrolls then
         for _, itemName in ipairs(bestConsumables.scrolls) do
-            createDrinkButton(DOM.itemIDMap[itemName], false, {itemName}, "DrinkOMaticScrollButton" .. itemName)
+            createDrinkButton({
+                persistentDefault = nil,
+                tryDruid = false,
+                itemNames = {itemName},
+                buttonName = "DrinkOMaticScrollButton" .. itemName
+            })
         end
     end
 
     if bestConsumables.foods then
         for _, itemName in ipairs(bestConsumables.foods) do
-            createDrinkButton(DOM.itemIDMap[itemName], false, {itemName}, "DrinkOMaticFoodButton" .. itemName)
+            createDrinkButton({
+                persistentDefault = nil,
+                tryDruid = false,
+                itemNames = {itemName},
+                buttonName = "DrinkOMaticFoodButton" .. itemName
+            })
         end
     end
 
     if bestConsumables.other then
         for _, itemName in ipairs(bestConsumables.other) do
-            createDrinkButton(DOM.itemIDMap[itemName], DOM_DRUID, {itemName}, "DrinkOMaticCombatPotionButton" .. itemName)
+            createDrinkButton({
+                persistentDefault = nil,
+                tryDruid = DOM_DRUID,
+                itemNames = {itemName},
+                buttonName = "DrinkOMaticCombatPotionButton" .. itemName
+            })
         end
     end
 
@@ -1909,6 +2113,7 @@ function DOM:UpdateCooldown(button)
         local start, duration, enable = C_Container.GetItemCooldown(itemID)
         local onCooldown = IsOnCooldown(start, duration)
         if onCooldown then
+            -- print("Button", button:GetName(), "is on cooldown. Start:", start, "Duration:", duration, "Enable:", enable, button.isDefault)
             if not button.isDesaturated then
                 button.buttonTexture:SetDesaturated(true)
                 button.isDesaturated = true
@@ -1919,9 +2124,16 @@ function DOM:UpdateCooldown(button)
             end
             return true
         else
-            button.buttonTexture:SetDesaturated(false)
-            button.isDesaturated = false
-            button.cooldownStarted = false
+            if (button.itemCount and button.itemCount > 0) or (button.altItemCount and button.altItemCount > 0) then
+                if button.isDefault then
+                    print(button.itemCount , button.altItemCount, button.itemName, button.isDefault)
+                end
+                if not button.isDefault then
+                    button.buttonTexture:SetDesaturated(false)
+                    button.isDesaturated = false
+                    button.cooldownStarted = false
+                end
+            end
         end
     end
     return false 
@@ -1943,6 +2155,9 @@ function DOM:UpdateAuras()
     local activeAuras = {}
     local i = 1
     while true do
+        if CombatRestrictedAuras and InCombatLockdown() then
+            break
+        end
         local name, icon, count, debuffType, duration, expirationTime, 
               unitCaster, isStealable, nameplateShowPersonal, spellId = UnitAura("player", i)
         if not name then break end
@@ -2148,22 +2363,34 @@ function DOM:OnInitialize()
 
     DOM:CreateFrame()
     DOM_DRUID = amIaDruid()
+    IsMage = amIaMage()
     get_tables()
     makeCategoriesTable()
 
     local name = "Drink-o-Matic"
+    local shortName = "DOM"
     _G["BINDING_HEADER_DOMHEAD"] = name
     for k=1,12 do
         _G[("BINDING_NAME_CLICK DOMButton%d:Keybind"):format(k)] = ("%s %s"):format(name, L["Button %s"]:format(k))
 
         -- _G[("BINDING_NAME_CLICK DOMButton%d"):format(k)] = ("%s %s"):format(name, L["Button %s"]:format(k))
     end
+    _G[("BINDING_NAME_CLICK DOMButton_DRINK:Keybind")] = ("%s %s"):format(shortName, L["Drink"])
+	_G[("BINDING_NAME_CLICK DOMButton_EAT:Keybind")] = ("%s %s"):format(shortName, L["Eat"])
+	_G[("BINDING_NAME_CLICK DOMButton_HEALTHSTONE:Keybind")] = ("%s %s"):format(shortName, L["Healthstone"])
+	_G[("BINDING_NAME_CLICK DOMButton_HEALTHPOT:Keybind")] = ("%s %s"):format(shortName, L["Healing Potion"])
+	_G[("BINDING_NAME_CLICK DOMButton_MANAPOT:Keybind")] = ("%s %s"):format(shortName, L["Mana Potion"])
+	_G[("BINDING_NAME_CLICK DOMButton_MANAGEM:Keybind")] = ("%s %s"):format(shortName, L["Mana Gem"])
+	_G[("BINDING_NAME_CLICK DOMButton_DREAM:Keybind")] = ("%s %s"):format(shortName, L["Dreaming Mana Potion"])
+	_G[("BINDING_NAME_CLICK DOMButton_BANDAGE:Keybind")] = ("%s %s"):format(shortName, L["Bandage"])
 
     DOM:Initialize(self)
 
     actionDown = GetCVar("ActionButtonUseKeyDown") == "1"
 
     self:RegisterChatCommand("dom", "HandleSlashCommand")
+
+
 
 end
 
@@ -2215,6 +2442,12 @@ function DOM:HandleSlashCommand(msg)
         PRINTMACRO = not PRINTMACRO
     elseif cmd == "action" then
         print(actionDown)
+    elseif cmd == "redo" then
+        DOM:createButtons()
+    elseif cmd == "reset" then
+        if args[2] == "bindings" then
+            
+        end
     else
         print("Unknown command: " .. cmd)
         showDomHelp()
