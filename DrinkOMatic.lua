@@ -1461,10 +1461,10 @@ function DOM:EnterEditMode()
                 name = DOM.buttonNameMap:Get(buttonName)
             end
             if DOM.Buttons[name].EnterEditMode then DOM.Buttons[name]:EnterEditMode() end
-            -- if actionDown then
-            --     print("Disabling clicks for", name)
-            --     DOM.Buttons[name]:RegisterForClicks()
-            -- end
+            if actionDown then
+                print("Disabling clicks for", name)
+                DOM.Buttons[name]:RegisterForClicks()
+            end
         else
             local dropTarget = DOM.Buttons[buttonName]
 
@@ -1483,9 +1483,12 @@ function DOM:EnterEditMode()
     end
     -- print("Disabling clicks...", actionDown)
     for name, button in pairs(DOM.Buttons) do
-        if actionDown then
-            -- print("Disabling clicks for", name)
-            button:RegisterForClicks()
+        -- if actionDown then
+        --     -- print("Disabling clicks for", name)
+        --     button:RegisterForClicks()
+        -- end
+        if button.EnterEditMode then
+            button:EnterEditMode()
         end
     end
 end
@@ -1494,11 +1497,22 @@ function DOM:DestroyButton(button)
     if not button then return end
     local buttonName = button:GetName()
 
-    button:UnregisterAllEvents()  -- Unregister events to prevent lingering references
-    button:SetParent(nil)         -- Remove parent reference
-    button:ClearAllPoints()       -- Clear anchors
-    button:EnableMouse(false)     -- Disable interaction
-    button:Hide()                 -- Ensure it's hidden from view
+    button:UnregisterAllEvents()              -- Unregister events to prevent lingering references
+    button:SetParent(nil)                     -- Remove parent reference
+    button:ClearAllPoints()                   -- Clear anchors
+    button:EnableMouse(false)                 -- Disable interaction
+    button:Hide()                             -- Ensure it's hidden from view
+    if button.overlay then
+        local overlay = button.overlay
+        if overlay.UnregisterAllEvents then
+            overlay:UnregisterAllEvents()  -- Unregister overlay events
+        end
+        overlay:SetParent(nil)         -- Remove overlay parent if it exists
+        overlay:ClearAllPoints()       -- Clear overlay anchors
+        overlay:EnableMouse(false)     -- Disable overlay interaction
+        overlay:Hide()                 -- Hide the overlay
+        button.overlay = nil                  -- Remove overlay reference
+    end
     
     DOM.Buttons[buttonName] = nil     -- Remove reference from DOM.Buttons
     button = nil                  -- Remove local reference, allowing Lua's garbage collector to clean up
@@ -1541,6 +1555,9 @@ function DOM:ExitEditMode()
         end
     end
     for name, button in pairs(DOM.Buttons) do
+        if button.ExitEditMode then
+            button:ExitEditMode()
+        end
         if actionDown then
             -- print("Enabling clicks for", name)
             button:RegisterForClicks("AnyDown", "AnyUp")
@@ -2428,7 +2445,7 @@ function DOM:HandleSlashCommand(msg)
     local args = split(msg)
     local cmd = args[1]
 
-    if cmd == "" then
+    if cmd == "" or cmd == nil then
         showDomHelp()
     elseif cmd == "kb" then
         print("Toggling keybind mode")
